@@ -1,0 +1,24 @@
+[global]
+workgroup = WORKGROUP
+security = USER
+server string = NAS Server
+	encrypt passwords = Yes
+username level = 0
+	map to guest = Bad User
+null passwords = yes
+	max log size = 10
+0 4 * * * /sbin/hwclock -s
+0 3 * * * /sbin/vs_refresh
+0 5 * * * /etc/init.d/ddns_update.sh
+0 3 * * * /sbin/clean_reset_pwd
+0-59/15 * * * * /etc/init.d/nss2_dusg.sh
+0 3 * * 0 /etc/init.d/idmap.sh dump
+10 15 * * * /usr/bin/power_clean -c 2>/dev/null
+30 15 * * mon,thu /share/HDA_DATA/backupjob/backupjob.sh
+0 11 * * * /opt/sbin/logrotate -v /share/HDA_DATA/logrotate/logrotate.conf>>/share/HDA_DATA/logrotate/logrotate.log 2>&1
+0 15 * * 3 /sbin/qsmart -t extend -d 1
+0 3 * * * /etc/init.d/ImRd.sh bgThGen
+0 0 * * 3 /etc/init.d/antivirus.sh scan 1
+0 0 * * * /etc/init.d/antivirus.sh archive_log
+0 0 */1 * * /etc/init.d/antivirus.sh update_db
+4 3 * * 3 /etc/init.d/backup_conf.sh
