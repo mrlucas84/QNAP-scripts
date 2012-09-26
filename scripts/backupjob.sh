@@ -32,7 +32,7 @@ RSYNCLOG=/share/HDA_DATA/backupjob/backupjob-rsync.log
 #example: --skip-compress=gz/jpg/mp[34]/7z/bz2
 #my code: --skip-compress=7z/tbz/tgz/z/zip/bz2/rpm/deb/gz/iso/jpeg/jpg/avi/mov/mkv/mp[34]/ogg/flac/pdf/bin/exe
 #The default list of suffixes that will not be compressed: 7z avi bz2 deb gz iso jpeg jpg mov mp3 mp4 ogg rpm tbz tgz z zip         
-SKIPZLIST="7z/7Z/tbz/tgz/z/zip/ZIP/bz2/rpm/deb/gz/iso/ISO/jpeg/JPEG/jpg/JPG/avi/AVI/mov/MOV/mkv/MKV/mp[34]/MP[34]/ogg//FLAC/flac/PDF/pdf/BIN/bin/EXE/exe"
+SKIPZLIST="7z/7Z/tbz/tgz/z/zip/ZIP/rar/RAR/bz2/rpm/deb/gz/iso/ISO/jpeg/JPEG/jpg/JPG/avi/AVI/mov/MOV/mkv/MKV/mp[34]/MP[34]/ogg/flac/FLAC/pdf/PDF/bin/BIN/exe/EXE"
 
 #DRYRUN="--dry-run"
 #COMMANDS[0]="/opt/bin/rsync -vrt  $DRYRUN --skip-compress=$SKIPZLIST --chmod=ugo=rwX --delete /share/HDA_DATA/Public/rsynctest/Asencion Dani@$rsyncd_hostname::rsynctest"
