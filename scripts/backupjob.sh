@@ -24,7 +24,7 @@ function send_mail() {
     /usr/sbin/sendmail -t < "$TMPFILE"
     rm $TMPFILE
 }
-timestamp_log() { while IFS='' read -r line; do echo "$line" >> "$1"; done; };
+timestamp_log() { while IFS='' read -r line; do echo "[$(date '+%F %T')] $line" >> "$1"; done; };
 
 MAINLOG=/share/HDA_DATA/backupjob/backupjob.log
 RSYNCLOG=/share/HDA_DATA/backupjob/backupjob-rsync.log
