@@ -40,6 +40,7 @@ COMMANDS[0]="/opt/bin/rsync -vrt  $DRYRUN --skip-compress=$SKIPZLIST --chmod=ugo
 COMMANDS[1]="/opt/bin/rsync -vrtz $DRYRUN --skip-compress=$SKIPZLIST --chmod=ugo=rwX --delete /share/HDA_DATA/Public/Documentos Dani@$rsyncd_hostname::nasbackup"
 COMMANDS[2]="/opt/bin/rsync -vrt  $DRYRUN --skip-compress=$SKIPZLIST --chmod=ugo=rwX --delete /share/HDA_DATA/Public/PDF Dani@$rsyncd_hostname::nasbackup"
 COMMANDS[3]="/opt/bin/rsync -vrt  $DRYRUN --skip-compress=$SKIPZLIST --chmod=ugo=rwX --delete /share/HDA_DATA/Public/MUSICA Dani@$rsyncd_hostname::nasbackup"
+COMMANDS[4]="/opt/bin/rsync -vrtz $DRYRUN --skip-compress=$SKIPZLIST --chmod=ugo=rwX --delete /share/HDA_DATA/Public/eBooks Dani@$rsyncd_hostname::nasbackup"
 
 #exec &> "$MAINLOG"
 #exec 2>&1>>"$MAINLOG"
@@ -47,10 +48,22 @@ COMMANDS[3]="/opt/bin/rsync -vrt  $DRYRUN --skip-compress=$SKIPZLIST --chmod=ugo
 exec 2>&1> >(timestamp_log $MAINLOG)
 echo "Starting backupjob.sh"
 echo "PATH: $PATH"
-#$rsyncd_hostname - $rsyncd_ip - $rsyncd_mac
-echo "Waking remote rsync server up and waiting 30s..."
-/opt/bin/wakelan -m $rsyncd_mac
-sleep 30
+echo "Checking if remote rsync server is up."
+ping -c 1 $rsyncd_hostname
+if [ $? -eq 0 ] ; then
+    ISUP=true
+else
+    ISUP=false
+fi
+
+if ! $ISUP; then
+	echo "Host is DOWN. Waking up and waiting 70s..."
+	#$rsyncd_hostname - $rsyncd_ip - $rsyncd_mac
+	/opt/bin/wakelan -m $rsyncd_mac
+	sleep 70
+else
+    echo "Host IS ALREADY UP! Skipping wake on lan"
+fi
 for ((i=1; i<=15; i++)); do                          
     echo -n "Checking if rsyncd is up on port 873 (try #$i)..."
     /opt/bin/nc -z -w 5 $rsyncd_hostname 873                    # Try connecting
@@ -61,17 +74,18 @@ for ((i=1; i<=15; i++)); do
         error_rc=0
         elements="${#COMMANDS[@]}"
         for (( i=0;i<$elements;i++)); do
-            echo "Executing command: ${COMMANDS[${i}]}"
-			exec 2>&1> >(timestamp_log $RSYNCLOG)
+            echo "Executing: ${COMMANDS[${i}]}"
+            exec 2>&1> >(timestamp_log $RSYNCLOG)
+            echo "***Executing: ${COMMANDS[${i}]}"
             eval "${COMMANDS[${i}]}"
-			exec 2>&1> >(timestamp_log $MAINLOG)
             return_code=$?
+            exec 2>&1> >(timestamp_log $MAINLOG)
             if [[ $return_code -ne 0 ]] ; then
                 error_rc=return_code
                 echo "Error in rsync task." 
             fi
         done
-        
+        exec 2>&1> >(timestamp_log $MAINLOG)
         error_level=INFO
         if [[ $error_rc -eq 0 ]] ; then
             echo "All rsync tasks finished successfully."
@@ -79,30 +93,37 @@ for ((i=1; i<=15; i++)); do
             echo "Some rsync tasks DID NOT finished successfully."
             error_level=ERROR
         fi
-        echo "Executing remote shutdown on rsync server. Waiting 60s"
-        # /usr/bin/ssh rsync@$rsyncd_hostname 'd:\cygwin\bin\shutdown -s 30'
-        /usr/bin/ssh rsync@$rsyncd_hostname 'c:\Windows\System32\shutdown /s /t 30 /c "El PC se apagara en 30s, ha terminado la tarea de copia de seguridad"'
-        #/usr/bin/ssh rsync@$rsyncd_hostname 'c:\Windows\System32\shutdown -?'
-        sleep 60
-        for ((i=1; i<=15; i++)); do                          
-            echo "Pinging to check if rsync server is down (try #$i)..."
-            /bin/ping -c 1 $rsyncd_hostname                    # Try pinging 1 times
-            return_code=$?
-            if [[ $return_code -ne 0 ]] ; then                # return code 1 is reply--> NOK, else OK
-                echo "Remote shutdown seems completed, no ping reply. Sending notification email..."
-                send_mail $error_level
-                echo "Done. Exit."
-                exit 0                        # If okay, flag to exit loop.            
-            else
-                echo "Got ping replay. Wait 15s before trying again"
-                sleep 15
-            fi                
-        done
-        echo "Still getting ping replies after $((--i)) attempts. Shutdown FAILED. Giving up"
-        echo -n "Sending notification email..."
-        send_mail ERROR
-        echo "Done. Exit."
-        exit 2  
+		if ! $ISUP; then
+			echo "Executing remote shutdown on rsync server. Waiting 60s"
+			# /usr/bin/ssh rsync@$rsyncd_hostname 'd:\cygwin\bin\shutdown -s 30'
+			/usr/bin/ssh rsync@$rsyncd_hostname 'c:\Windows\System32\shutdown /s /t 30 /c "El PC se apagara en 30s, ha terminado la tarea de copia de seguridad"'
+			sleep 60
+			for ((i=1; i<=15; i++)); do                          
+				echo "Pinging to check if rsync server is down (try #$i)..."
+				exec 2>&1> >(timestamp_log $RSYNCLOG)
+				/bin/ping -c 1 $rsyncd_hostname                            # Try pinging 1 times
+				return_code=$?
+				exec 2>&1> >(timestamp_log $MAINLOG)
+				if [[ $return_code -ne 0 ]] ; then                # return code 1 is reply--> NOK, else OK
+					echo "No ping reply. Remote shutdown seems completed. Sending notification email..."
+					send_mail $error_level
+					echo "Done. Exit."
+					exit 0                        # If okay, flag to exit loop.            
+				else
+					echo "Got ping replay. Wait 15s before trying again"
+					sleep 15
+				fi                
+			done
+			echo "Still getting ping replies after $((--i)) attempts. Graceful shutdown FAILED"
+			echo "Trying force shutdown before giving up"
+			/usr/bin/ssh rsync@$rsyncd_hostname 'c:\Windows\System32\shutdown /p /f'
+			echo -n "Sending notification email..."
+			send_mail ERROR
+			echo "Done. Exit."
+			exit 2
+		else
+			echo "Skipping shutdown since host was already up."
+		fi
     else
         echo "FAILED. Wait 15s before trying again"
         sleep 15

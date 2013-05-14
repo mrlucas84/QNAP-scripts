@@ -1,9 +1,10 @@
-#!/bin/sh
+#!/opt/bin/bash
 LOG=/share/HDA_DATA/Transmission/transmission.log
 timestamp_log() { while IFS='' read -r line; do echo "[$(date '+%F %T')] $line" >> "$1"; done; };
 #exec &> "$LOG"
 #exec 2>&1>>"$LOG"
 exec 2>&1> >(timestamp_log $LOG)
+
 
 echo "Starting transmission.sh" 
 #Checks if transmission runs and closes it if it does. This is so I don't get more than one copy of Transmission at a time, when I test this file through Putty.
