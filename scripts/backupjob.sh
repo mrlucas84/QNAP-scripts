@@ -1,5 +1,6 @@
 #!/opt/bin/bash
 # script called by cron
+
 # Send a mail message
 function send_mail() {
 	# Takes one optional parameter to indicate error level as subject prefix
@@ -30,25 +31,15 @@ MAINLOG=/share/HDA_DATA/backupjob/backupjob.log
 RSYNCLOG=/share/HDA_DATA/backupjob/backupjob-rsync.log
 	 
 #example: --skip-compress=gz/jpg/mp[34]/7z/bz2
-#my code: --skip-compress=7z/tbz/tgz/z/zip/bz2/rpm/deb/gz/iso/jpeg/jpg/avi/mov/mkv/mp[34]/ogg/flac/pdf/bin/exe
-#The default list of suffixes that will not be compressed: 7z avi bz2 deb gz iso jpeg jpg mov mp3 mp4 ogg rpm tbz tgz z zip         
+#default list of suffixes that will not be compressed: 7z avi bz2 deb gz iso jpeg jpg mov mp3 mp4 ogg rpm tbz tgz z zip         
 SKIPZLIST="7z/7Z/tbz/tgz/z/zip/ZIP/rar/RAR/bz2/rpm/deb/gz/iso/ISO/jpeg/JPEG/jpg/JPG/avi/AVI/mov/MOV/mkv/MKV/mp[34]/MP[34]/ogg/flac/FLAC/pdf/PDF/bin/BIN/exe/EXE"
 
 DRYRUN="--dry-run"
-#COMMANDS[0]="/opt/bin/rsync -vrt  $DRYRUN --skip-compress=$SKIPZLIST --chmod=ugo=rwX --delete /share/HDA_DATA/Public/rsynctest/Asencion Dani@$rsyncd_hostname::rsynctest"
-#COMMANDS[0]="/opt/bin/rsync -vrt  $DRYRUN --skip-compress=$SKIPZLIST --chmod=ugo=rwX --delete /share/HDA_DATA/Public/FOTOS Dani@$rsyncd_hostname::nasbackup"
-#COMMANDS[1]="/opt/bin/rsync -vrtz $DRYRUN --skip-compress=$SKIPZLIST --chmod=ugo=rwX --delete /share/HDA_DATA/Public/Documentos Dani@$rsyncd_hostname::nasbackup"
-#COMMANDS[2]="/opt/bin/rsync -vrt  $DRYRUN --skip-compress=$SKIPZLIST --chmod=ugo=rwX --delete /share/HDA_DATA/Public/PDF Dani@$rsyncd_hostname::nasbackup"
-#COMMANDS[3]="/opt/bin/rsync -vrt  $DRYRUN --skip-compress=$SKIPZLIST --chmod=ugo=rwX --delete /share/HDA_DATA/Public/MUSICA Dani@$rsyncd_hostname::nasbackup"
-#COMMANDS[4]="/opt/bin/rsync -vrtz $DRYRUN --skip-compress=$SKIPZLIST --chmod=ugo=rwX --delete /share/HDA_DATA/Public/eBooks Dani@$rsyncd_hostname::nasbackup"
-
 ARRAY=( "-vrt :/share/HDA_DATA/Public/FOTOS"
 		"-vrtz:/share/HDA_DATA/Public/Documentos"
 		"-vrt :/share/HDA_DATA/Public/PDF"
 		"-vrt :/share/HDA_DATA/Public/MUSICA" )
 
-#exec &> "$MAINLOG"
-#exec 2>&1>>"$MAINLOG"
 #redirect sterr to stdout and then stdout to function
 exec 2>&1> >(timestamp_log $MAINLOG)
 echo "Starting backupjob.sh"
