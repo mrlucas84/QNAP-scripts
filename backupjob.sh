@@ -3,15 +3,16 @@
 
 # Send a mail message
 function send_mail() {
-	# Takes one optional parameter to indicate error level as subject prefix
-	SUBJECT="Scheduled backup job finished"
+	# Takes one optional parameter to indicate error level as subject prefix ($1)
+	echo "Sending out notification email. Error level: $1"
+	SUBJECT="Backup job finished"
 	TO=$email_to
 	FROM=$email_from
 	MSG=/share/HDA_DATA/backupjob/backupjob.log
 	TIMESTAMP=`date '+%F %T'`
 
 	TMPFILE="/tmp/sendmail.tmp"
-	/bin/echo -e "Subject:[$TIMESTAMP] $1 - $SUBJECT\r" > "$TMPFILE"
+	/bin/echo -e "Subject:$1 - $SUBJECT [$TIMESTAMP]\r" > "$TMPFILE"
 	/bin/echo -e "To: $TO\r" >> "$TMPFILE"
 	/bin/echo -e "From: $FROM\r" >> "$TMPFILE"
 	/bin/echo -e "\r" >> "$TMPFILE"
@@ -47,19 +48,17 @@ echo "PATH: $PATH"
 echo "Checking if remote rsync server is up."
 ping -c 1 $rsyncd_hostname
 if [ $? -eq 0 ] ; then
-	ISUP=true
-else
-	ISUP=false
+	ISUP=1
 fi
-
-if ! $ISUP; then
+if [[ ! $ISUP ]] ; then
 	echo "Host is DOWN. Waking up and waiting 70s..."
 	#$rsyncd_hostname - $rsyncd_ip - $rsyncd_mac
 	/opt/bin/wakelan -m $rsyncd_mac
 	sleep 70
 else
-	echo "Host IS ALREADY UP! Skipping wake on lan"
+	echo "Host IS ALREADY UP! Skipping wake on lan."
 fi
+#try 15 times to see if rsync server is up
 for ((i=1; i<=15; i++)); do                          
 	echo -n "Checking if rsyncd is up on port 873 (try #$i)..."
 	/opt/bin/nc -z -w 5 $rsyncd_hostname 873                    # Try connecting
@@ -67,8 +66,11 @@ for ((i=1; i<=15; i++)); do
 	if [[ $return_code -eq 0 ]] ; then                # return code 0 is OK, else KO
 		echo "Success!"
 		echo "Starting rsync tasks"
+		if [[ $DRYRUN ]] ; then
+			echo "TRIAL RUN, no changes will be made."
+		fi
 		exec 2>&1> >(timestamp_log $RSYNCLOG)
-		echo "***Starting backupjob.sh rsync tasks"
+		echo "***Starting backupjob.sh rsync tasks."
 		exec 2>&1> >(timestamp_log $MAINLOG)
 		error_rc=0
 		for item in "${ARRAY[@]}" ; do
@@ -100,6 +102,7 @@ for ((i=1; i<=15; i++)); do
 			# /usr/bin/ssh rsync@$rsyncd_hostname 'd:\cygwin\bin\shutdown -s 30'
 			/usr/bin/ssh rsync@$rsyncd_hostname 'c:\Windows\System32\shutdown /s /t 30 /c "El PC se apagara en 30s, ha terminado la tarea de copia de seguridad"'
 			sleep 60
+			#try 15 times
 			for ((i=1; i<=15; i++)); do                          
 				echo "Pinging to check if rsync server is down (try #$i)..."
 				exec 2>&1> >(timestamp_log $RSYNCLOG)
@@ -107,35 +110,33 @@ for ((i=1; i<=15; i++)); do
 				return_code=$?
 				exec 2>&1> >(timestamp_log $MAINLOG)
 				if [[ $return_code -ne 0 ]] ; then                # return code 1 is reply--> NOK, else OK
-					echo "No ping reply. Remote shutdown seems completed. Sending notification email..."
+					echo "No ping reply. Remote shutdown seems completed."
 					send_mail $error_level
-					echo "Done. Exit."
+					echo "Exit."
 					exit 0                        # If okay, flag to exit loop.            
 				else
-					echo "Got ping replay. Wait 15s before trying again"
+					echo "Got ping replay. Wait 15s before trying again..."
 					sleep 15
 				fi                
 			done
 			echo "Still getting ping replies after $((--i)) attempts. Graceful shutdown FAILED"
 			echo "Trying force shutdown before giving up"
 			/usr/bin/ssh rsync@$rsyncd_hostname 'c:\Windows\System32\shutdown /p /f'
-			echo -n "Sending notification email..."
 			send_mail ERROR
-			echo "Done. Exit."
+			echo "Exit."
 			exit 2
 		else
-			echo "Skipping shutdown since host was already up. Sending notification email..."
+			echo "Skipping shutdown since host was already up."
 			send_mail $error_level
-			echo "Done. Exit."
+			echo "Exit."
 			exit 0
 		fi
 	else
-		echo "FAILED. Wait 15s before trying again"
+		echo "FAILED. Wait 15s before trying again..."
 		sleep 15
 	fi
 done
-echo "Failed connecting to rsync server after $((--i)) attempts. Giving up"
-echo -n "Sending notification email..."
+echo "Failed connecting to rsync server after $((--i)) attempts. Giving up."
 send_mail FATAL
-echo "Done. Exit."
+echo "Exit."
 exit 1
