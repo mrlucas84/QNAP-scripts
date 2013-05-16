@@ -1,4 +1,4 @@
-bash-scripts
+QNAP bash-scripts
 ============
 
-Bash scripts
+QNAP Bash scripts
