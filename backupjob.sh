@@ -45,7 +45,14 @@ ARRAY=( "-vrt :/share/HDA_DATA/Public/FOTOS"
 exec 2>&1> >(timestamp_log $MAINLOG)
 echo "Starting backupjob.sh"
 echo "PATH: $PATH"
-echo "Checking if remote rsync server is up."
+echo "Config:"
+echo "----------------------------------"
+echo "rsyncd_hostname=$rsyncd_hostname"
+echo "rsyncd_mac=$rsyncd_mac"
+echo "email_from=$email_from"
+echo "email_to=$email_to"
+echo "----------------------------------"
+echo "Checking if remote rsync server is already up."
 ping -c 1 $rsyncd_hostname
 if [ $? -eq 0 ] ; then
 	ISUP=1
