@@ -1,6 +1,6 @@
 #!/opt/bin/bash
 # script called by cron
-
+source ./backupjob.cfg
 # Send a mail message
 function send_mail() {
 	# Takes one optional parameter to indicate error level as subject prefix ($1)
