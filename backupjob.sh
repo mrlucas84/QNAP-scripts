@@ -28,19 +28,6 @@ function send_mail() {
 }
 timestamp_log() { while IFS='' read -r line; do echo "[$(date '+%F %T')] $line" >> "$1"; done; };
 
-MAINLOG=/share/HDA_DATA/backupjob/backupjob.log
-RSYNCLOG=/share/HDA_DATA/backupjob/backupjob-rsync.log
-	 
-#example: --skip-compress=gz/jpg/mp[34]/7z/bz2
-#default list of suffixes that will not be compressed: 7z avi bz2 deb gz iso jpeg jpg mov mp3 mp4 ogg rpm tbz tgz z zip         
-SKIPZLIST="7z/7Z/tbz/tgz/z/zip/ZIP/rar/RAR/bz2/rpm/deb/gz/iso/ISO/jpeg/JPEG/jpg/JPG/avi/AVI/mov/MOV/mkv/MKV/mp[34]/MP[34]/ogg/flac/FLAC/pdf/PDF/bin/BIN/exe/EXE"
-
-DRYRUN="--dry-run"
-ARRAY=( "-vrt :/share/HDA_DATA/Public/FOTOS"
-		"-vrtz:/share/HDA_DATA/Public/Documentos"
-		"-vrt :/share/HDA_DATA/Public/PDF"
-		"-vrt :/share/HDA_DATA/Public/MUSICA" )
-
 #redirect sterr to stdout and then stdout to function
 exec 2>&1> >(timestamp_log $MAINLOG)
 echo "Starting backupjob.sh"
@@ -52,6 +39,23 @@ echo "rsyncd_mac=$rsyncd_mac"
 echo "email_from=$email_from"
 echo "email_to=$email_to"
 echo "----------------------------------"
+
+MAINLOG=/share/HDA_DATA/backupjob/backupjob.log
+RSYNCLOG=/share/HDA_DATA/backupjob/backupjob-rsync.log
+	 
+#example: --skip-compress=gz/jpg/mp[34]/7z/bz2
+#default list of suffixes that will not be compressed: 7z avi bz2 deb gz iso jpeg jpg mov mp3 mp4 ogg rpm tbz tgz z zip         
+SKIPZLIST="7z/7Z/tbz/tgz/z/zip/ZIP/rar/RAR/bz2/rpm/deb/gz/iso/ISO/jpeg/JPEG/jpg/JPG/avi/AVI/mov/MOV/mkv/MKV/mp[34]/MP[34]/ogg/flac/FLAC/pdf/PDF/bin/BIN/exe/EXE"
+
+if [[ $set_dryrun ]] ; then	
+	DRYRUN="--dry-run"
+fi
+ARRAY=( "-vrt :/share/HDA_DATA/Public/FOTOS"
+		"-vrtz:/share/HDA_DATA/Public/Documentos"
+		"-vrt :/share/HDA_DATA/Public/PDF"
+		"-vrt :/share/HDA_DATA/Public/MUSICA" )
+
+#######START STUFF
 echo "Checking if remote rsync server is already up."
 ping -c 1 $rsyncd_hostname
 if [ $? -eq 0 ] ; then
