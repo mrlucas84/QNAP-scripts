@@ -31,13 +31,14 @@ timestamp_log() { while IFS='' read -r line; do echo "[$(date '+%F %T')] $line" 
 #redirect sterr to stdout and then stdout to function
 exec 2>&1> >(timestamp_log $MAINLOG)
 echo "Starting backupjob.sh"
-echo "PATH: $PATH"
+#echo "PATH: $PATH"
 echo "Config:"
 echo "----------------------------------"
 echo "rsyncd_hostname=$rsyncd_hostname"
 echo "rsyncd_mac=$rsyncd_mac"
 echo "email_from=$email_from"
 echo "email_to=$email_to"
+echo "is_dryrun=$is_dryrun"
 echo "----------------------------------"
 
 MAINLOG=/share/HDA_DATA/backupjob/backupjob.log
@@ -47,7 +48,7 @@ RSYNCLOG=/share/HDA_DATA/backupjob/backupjob-rsync.log
 #default list of suffixes that will not be compressed: 7z avi bz2 deb gz iso jpeg jpg mov mp3 mp4 ogg rpm tbz tgz z zip         
 SKIPZLIST="7z/7Z/tbz/tgz/z/zip/ZIP/rar/RAR/bz2/rpm/deb/gz/iso/ISO/jpeg/JPEG/jpg/JPG/avi/AVI/mov/MOV/mkv/MKV/mp[34]/MP[34]/ogg/flac/FLAC/pdf/PDF/bin/BIN/exe/EXE"
 
-if [[ $set_dryrun ]] ; then	
+if [[ $is_dryrun ]] ; then
 	DRYRUN="--dry-run"
 fi
 ARRAY=( "-vrt :/share/HDA_DATA/Public/FOTOS"
