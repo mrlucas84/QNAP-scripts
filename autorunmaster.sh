@@ -1,5 +1,8 @@
-#!/bin/sh
-#this is called by autorun.sh
+#!/opt/bin/bash
+# no se si debera ser /bin/sh
+# this is called by autorun.sh
+# /share/HDA_DATA/.qpkg/autorun/autorunmaster.sh
+
 timestamp_log() { while IFS='' read -r line; do echo "[$(date '+%F %T')] $line" >> "$1"; done; };
 AUTORUNLOG=/share/HDA_DATA/.qpkg/autorun/autorunmaster.log
 #exec &>"$AUTORUNLOG"
@@ -39,5 +42,5 @@ echo "Transmission script done."
 
 echo "Starting KMS server vlmcsd '/share/HDA_DATA/kms-vlmcsd/vlmcsd.sh forcestart'"
 /share/HDA_DATA/kms-vlmcsd/vlmcsd.sh forcestart
-
+echo "KMS server script finished starting"
 echo "End of autorunmaster.sh"
