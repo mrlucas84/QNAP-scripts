@@ -1,6 +1,6 @@
 #!/opt/bin/bash
 # script called by cron
-source ./backupjob.cfg
+source /share/HDA_DATA/backupjob/backupjob.cfg
 # Send a mail message
 function send_mail() {
 	# Takes one optional parameter to indicate error level as subject prefix ($1)
@@ -24,6 +24,8 @@ function send_mail() {
 	/usr/sbin/sendmail -t < "$tmpfile"
 	rm $tmpfile
 }
+mainlog=/share/HDA_DATA/backupjob/backupjob.log
+rsynclog=/share/HDA_DATA/backupjob/backupjob-rsync.log
 timestamp_log() { while IFS='' read -r line; do echo "[$(date '+%F %T')] $line" >> "$1"; done; };
 
 #redirect sterr to stdout and then stdout to function
@@ -38,9 +40,6 @@ echo "email_from=$email_from"
 echo "email_to=$email_to"
 echo "is_dryrun=$is_dryrun"
 echo "----------------------------------"
-
-mainlog=/share/HDA_DATA/backupjob/backupjob.log
-rsynclog=/share/HDA_DATA/backupjob/backupjob-rsync.log
 	 
 #example: --skip-compress=gz/jpg/mp[34]/7z/bz2
 #default list of suffixes that will not be compressed: 7z avi bz2 deb gz iso jpeg jpg mov mp3 mp4 ogg rpm tbz tgz z zip         
