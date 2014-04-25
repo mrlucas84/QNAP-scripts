@@ -36,4 +36,8 @@ ln -s /share/HDA_DATA/ssh/sshd_config /etc/ssh/sshd_config
 echo "Calling Transmission script /share/HDA_DATA/Transmission/transmission.sh"
 /share/HDA_DATA/Transmission/transmission.sh
 echo "Transmission script done."
+
+echo "Starting KMS server vlmcsd '/share/HDA_DATA/kms-vlmcsd/vlmcsd.sh forcestart'"
+/share/HDA_DATA/kms-vlmcsd/vlmcsd.sh forcestart
+
 echo "End of autorunmaster.sh"
