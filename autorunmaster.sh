@@ -40,7 +40,15 @@ echo "Calling Transmission script /share/HDA_DATA/Transmission/transmission.sh"
 /share/HDA_DATA/Transmission/transmission.sh
 echo "Transmission script done."
 
-echo "Starting KMS server vlmcsd '/share/HDA_DATA/kms-vlmcsd/vlmcsd.sh forcestart'"
-/share/HDA_DATA/kms-vlmcsd/vlmcsd.sh forcestart
-echo "KMS server script finished starting"
+echo "Copying /usr/local/etc/services to /etc/services"
+cp /usr/local/etc/services /etc/services
+sleep 5
+export OPTWARE_TARGET=cs08q1armel
+echo "xinetd start"
+if [ ! -e "/opt/sbin/xinetd" ]; then
+echo "xinetd not accessible"
+fi
+/sbin/daemon_mgr xinetd start "/opt/sbin/xinetd" 2>/dev/null
+echo "xinetd started"
+sleep 5
 echo "End of autorunmaster.sh"

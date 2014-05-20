@@ -1,0 +1,15 @@
+# vlmcsd xinetd config
+# /share/HDA_DATA/.qpkg/Optware/etc/xinetd.d/vlmcsd
+service vlmcs
+{
+        disable = no
+        type = UNLISTED
+        socket_type = stream
+        protocol = tcp
+        wait = no
+        user = admin
+        server = /share/HDA_DATA/kms-vlmcsd/vlmcsd
+        server_args = -l /share/HDA_DATA/kms-vlmcsd/vlmcsd.log -I -i /share/HDA_DATA/kms-vlmcsd/vlmcsd.ini -p /share/HDA_DATA/kms-vlmcsd/vlmcsd.pid
+        flags = IPv4
+        port = 1688
+}
