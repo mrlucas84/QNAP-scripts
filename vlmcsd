@@ -1,6 +1,6 @@
 # vlmcsd xinetd config
 # /share/HDA_DATA/.qpkg/Optware/etc/xinetd.d/vlmcsd
-service vlmcs
+service vlmcsd
 {
         disable = no
         type = UNLISTED
