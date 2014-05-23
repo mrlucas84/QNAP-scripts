@@ -42,13 +42,13 @@ echo "Transmission script done."
 
 echo "Copying /usr/local/etc/services to /etc/services"
 cp /usr/local/etc/services /etc/services
-sleep 5
+sleep 2
 export OPTWARE_TARGET=cs08q1armel
 echo "xinetd start"
 if [ ! -e "/opt/sbin/xinetd" ]; then
-echo "xinetd not accessible"
+	echo "xinetd not accessible"
 fi
 /sbin/daemon_mgr xinetd start "/opt/sbin/xinetd" 2>/dev/null
 echo "xinetd started"
-sleep 5
+#sleep 5
 echo "End of autorunmaster.sh"
