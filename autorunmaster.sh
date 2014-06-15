@@ -1,5 +1,5 @@
 #!/opt/bin/bash
-# no se si debera ser /bin/sh
+#!/bin/sh no funciona el redireccionamiento a funcion
 # this is called by autorun.sh
 # /share/HDA_DATA/.qpkg/autorun/autorunmaster.sh
 
@@ -10,7 +10,7 @@ AUTORUNLOG=/share/HDA_DATA/.qpkg/autorun/autorunmaster.log
 exec 2>&1> >(timestamp_log $AUTORUNLOG)
 echo "Starting autorunmaster.sh"
 # adding Ipkg apps into system path ... 
-# Dani 12/11/2011 ESTO SE HACE EN /opt/etc/init.d/Optware.sh 
+# Dani 12/11/2011 ESTO SE HACE EN /opt/Optware.sh 
 #/bin/cat /etc/profile | /bin/grep "PATH" | /bin/grep "/opt/bin" 1>>/dev/null 2>>/dev/null
 # Bug fix for following: put IPKG first, per http://forum.qnap.com/viewtopic.php?f=124&t=15663
 # was [ $? -ne 0 ] && /bin/echo "export PATH=$PATH":/opt/bin:/opt/sbin >> /etc/profile
