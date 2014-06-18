@@ -1,14 +1,29 @@
-#!/opt/bin/bash
+#!/bin/sh
+# con /opt/bin/bash parece que no se lanza en boot
+# con /bin/sh no funciona el redireccionamiento a funcion
+# /share/HDA_DATA/Transmission/transmission.sh
+alias ts='/opt/bin/ts'
 LOG=/share/HDA_DATA/Transmission/transmission.log
-timestamp_log() { while IFS='' read -r line; do echo "[$(date '+%F %T')] $line" >> "$1"; done; };
-#exec &> "$LOG"
-#exec 2>&1>>"$LOG"
-exec 2>&1> >(timestamp_log $LOG)
+PIPEFILE=test2pipe
+# create named pipe
+mkfifo $PIPEFILE
+# Start tee writing to a logfile, but pulling its input from our named pipe.
+ts "%F %H:%M:%.S" >> $LOG < $PIPEFILE &
+# capture ts's process ID for the wait command.
+TS_PID=$!
+# redirect the rest of the stderr and stdout to our named pipe.
+exec > $PIPEFILE 2>&1
 
-
-echo "Starting transmission.sh" 
+echo "*** Starting transmission.sh"
+echo "Checking whether transmission-daemon is already running..."
 #Checks if transmission runs and closes it if it does. This is so I don't get more than one copy of Transmission at a time, when I test this file through Putty.
-[ "$(pidof transmission-daemon)" ] && echo "Transmission is running. Killing Transmission-daemon before restart." && killall transmission-daemon || echo "Transmission is not running."
+if [ "$(pidof transmission-daemon)" ] 
+	then 
+		echo "Transmission is running. Killing transmission-daemon before start." 
+		killall transmission-daemon
+	else
+		echo "Transmission is not running. Continue."
+fi
 TRANSMISSION_BIN=/opt/bin
 #TRANSMISSION_HOME=/opt/etc/transmission
 TRANSMISSION_USER=transmission
@@ -32,6 +47,14 @@ sleep 20
 #$TRANSMISSION_BIN/transmission-remote -n $REMOTE_USER:$REMOTE_PASS --portmap --port $TRANSMISSION_PORT --pex --encryption-preferred
 
 echo "Transmission has started"
-#Remove Transmission shortcut just in case so it doesn't cause any trouble in the future.
-[ -f /etc/rcS.d/QS901transmission ] && echo "Shortcut exists. Removing." && rm /etc/rcS.d/QS901transmission || echo "Shortcut does not exist."
-echo "End of transmission.sh"
+#Remove Transmission link just in case so it doesn't cause any trouble in the future.
+TRANS_LINK=/etc/rcS.d/QS901transmission
+[ -f  $TRANS_LINK ] && echo "Link $TRANS_LINK exists. Removing." && rm $TRANS_LINK || echo "Link $TRANS_LINK does not exist. Nothing to be done"
+echo "*** End of transmission.sh"
+# close the stderr and stdout file descriptors.
+exec 1>&- 2>&-
+
+# Wait for ts to finish since now that other end of the pipe has closed.
+wait $TS_PID
+#delete named pipe when finished
+trap 'rm "$PIPEFILE"' EXIT

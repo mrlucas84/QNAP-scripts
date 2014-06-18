@@ -1,15 +1,23 @@
-#!/opt/bin/bash
-#!/bin/sh no funciona el redireccionamiento a funcion
+#!/bin/sh
+# con /opt/bin/bash parece que no se lanza
+# con /bin/sh no funciona el redireccionamiento a funcion/process substitution
 # this is called by autorun.sh
 # /share/HDA_DATA/.qpkg/autorun/autorunmaster.sh
 
-timestamp_log() { while IFS='' read -r line; do echo "[$(date '+%F %T')] $line" >> "$1"; done; };
+alias ts='/opt/bin/ts'
 AUTORUNLOG=/share/HDA_DATA/.qpkg/autorun/autorunmaster.log
-#exec &>"$AUTORUNLOG"
-#exec 2>&1>>$AUTORUNLOG
-exec 2>&1> >(timestamp_log $AUTORUNLOG)
-echo "Starting autorunmaster.sh"
-# adding Ipkg apps into system path ... 
+PIPEFILE=test2pipe
+# create named pipe
+mkfifo $PIPEFILE
+# Start tee writing to a logfile, but pulling its input from our named pipe.
+ts "%F %H:%M:%.S" >> $AUTORUNLOG < $PIPEFILE &
+# capture tee's process ID for the wait command.
+TEEPID=$!
+# redirect the rest of the stderr and stdout to our named pipe.
+exec > $PIPEFILE 2>&1
+
+echo ">>> Starting autorunmaster.sh"
+# adding IPKG apps into system path ... 
 # Dani 12/11/2011 ESTO SE HACE EN /opt/Optware.sh 
 #/bin/cat /etc/profile | /bin/grep "PATH" | /bin/grep "/opt/bin" 1>>/dev/null 2>>/dev/null
 # Bug fix for following: put IPKG first, per http://forum.qnap.com/viewtopic.php?f=124&t=15663
@@ -45,10 +53,20 @@ cp /usr/local/etc/services /etc/services
 sleep 2
 export OPTWARE_TARGET=cs08q1armel
 echo "xinetd start"
-if [ ! -e "/opt/sbin/xinetd" ]; then
-	echo "xinetd not accessible"
+if [ -e "/opt/sbin/xinetd" ]
+	then
+		/sbin/daemon_mgr xinetd start "/opt/sbin/xinetd" 2>/dev/null
+		echo "xinetd started"
+#		sleep 5
+	else
+		echo "xinetd not accessible"
 fi
-/sbin/daemon_mgr xinetd start "/opt/sbin/xinetd" 2>/dev/null
-echo "xinetd started"
-#sleep 5
-echo "End of autorunmaster.sh"
+echo "<<< End of autorunmaster.sh"
+
+# close the stderr and stdout file descriptors.
+exec 1>&- 2>&-
+
+# Wait for tee to finish since now that other end of the pipe has closed.
+wait $TEEPID
+#delete named pipe when finished
+trap 'rm "$PIPEFILE"' EXIT
