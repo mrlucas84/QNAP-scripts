@@ -18,10 +18,15 @@ ts_pid=$!
 # redirect the rest of the stderr and stdout to our named pipe.
 exec > $namedpipe 2>&1
 echo "PID of ts: $ts_pid"
-
-find ~/winnt -printf "%p\t%TY-%Tm-%Td %TH:%TM:%TS\n" | grep .xml
-echo "Sleeping some seconds..."
-sleep 10
+echo "Launching daemon"
+# find ~/winnt -printf "%p\t%TY-%Tm-%Td %TH:%TM:%TS\n" | grep .xml
+./vlmcsd-x86-glibc
+daemon_pid=$!
+# echo "Wait for daemon command PID: $daemon_pid"
+#espera indefinidamente parece que no funciona
+wait $daemon_pid
+#echo "Sleeping some seconds..."
+#sleep 10
 echo "Wait for PID of ts: $ts_pid"
 echo "Closing output redirection to log file"
 # close the stderr and stdout file descriptors.
