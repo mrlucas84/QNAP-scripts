@@ -4,7 +4,7 @@
 # /share/HDA_DATA/Transmission/transmission.sh
 alias ts='/opt/bin/ts'
 LOG=/share/HDA_DATA/Transmission/transmission.log
-PIPEFILE=test2pipe
+PIPEFILE=transmission_sh_pipe
 # create named pipe
 mkfifo $PIPEFILE
 # Start tee writing to a logfile, but pulling its input from our named pipe.
@@ -50,7 +50,6 @@ echo "Transmission has started"
 #Remove Transmission link just in case so it doesn't cause any trouble in the future.
 TRANS_LINK=/etc/rcS.d/QS901transmission
 [ -f  $TRANS_LINK ] && echo "Link $TRANS_LINK exists. Removing." && rm $TRANS_LINK || echo "Link $TRANS_LINK does not exist. Nothing to be done"
-echo "*** End of transmission.sh"
 # close the stderr and stdout file descriptors.
 exec 1>&- 2>&-
 
@@ -58,3 +57,4 @@ exec 1>&- 2>&-
 wait $TS_PID
 #delete named pipe when finished
 trap 'rm "$PIPEFILE"' EXIT
+echo "*** End of autorunmaster.sh" | ts "%F %H:%M:%.S" >> $AUTORUNLOG

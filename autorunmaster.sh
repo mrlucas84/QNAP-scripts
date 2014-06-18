@@ -6,7 +6,7 @@
 
 alias ts='/opt/bin/ts'
 AUTORUNLOG=/share/HDA_DATA/.qpkg/autorun/autorunmaster.log
-PIPEFILE=test2pipe
+PIPEFILE=autorunmaster_sh_pipe
 # create named pipe
 mkfifo $PIPEFILE
 # Start ts writing to a logfile, but pulling its input from our named pipe.
@@ -16,7 +16,9 @@ TS_PID=$!
 # redirect the rest of the stderr and stdout to our named pipe.
 exec > $PIPEFILE 2>&1
 
-echo ">>> Starting autorunmaster.sh"
+echo "*** Starting autorunmaster.sh"
+echo "PATH=$PATH"
+echo "PID of ts: $TS_PID"
 # adding IPKG apps into system path ... 
 # Dani 12/11/2011 ESTO SE HACE EN /opt/Optware.sh 
 #/bin/cat /etc/profile | /bin/grep "PATH" | /bin/grep "/opt/bin" 1>>/dev/null 2>>/dev/null
@@ -61,8 +63,7 @@ if [ -e "/opt/sbin/xinetd" ]
 	else
 		echo "xinetd not accessible"
 fi
-echo "<<< End of autorunmaster.sh"
-
+echo "Closing output redirection to log file"
 # close the stderr and stdout file descriptors.
 exec 1>&- 2>&-
 
@@ -70,3 +71,4 @@ exec 1>&- 2>&-
 wait $TS_PID
 #delete named pipe when finished
 trap 'rm "$PIPEFILE"' EXIT
+echo "*** End of autorunmaster.sh" | ts "%F %H:%M:%.S" >> $AUTORUNLOG
