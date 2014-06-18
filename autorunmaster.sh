@@ -1,5 +1,5 @@
 #!/bin/sh
-# con /opt/bin/bash parece que no se lanza
+# con /opt/bin/bash parece que no se lanza en boot
 # con /bin/sh no funciona el redireccionamiento a funcion/process substitution
 # this is called by autorun.sh
 # /share/HDA_DATA/.qpkg/autorun/autorunmaster.sh
@@ -9,10 +9,10 @@ AUTORUNLOG=/share/HDA_DATA/.qpkg/autorun/autorunmaster.log
 PIPEFILE=test2pipe
 # create named pipe
 mkfifo $PIPEFILE
-# Start tee writing to a logfile, but pulling its input from our named pipe.
+# Start ts writing to a logfile, but pulling its input from our named pipe.
 ts "%F %H:%M:%.S" >> $AUTORUNLOG < $PIPEFILE &
-# capture tee's process ID for the wait command.
-TEEPID=$!
+# capture ts's process ID for the wait command.
+TS_PID=$!
 # redirect the rest of the stderr and stdout to our named pipe.
 exec > $PIPEFILE 2>&1
 
@@ -66,7 +66,7 @@ echo "<<< End of autorunmaster.sh"
 # close the stderr and stdout file descriptors.
 exec 1>&- 2>&-
 
-# Wait for tee to finish since now that other end of the pipe has closed.
-wait $TEEPID
+# Wait for ts to finish since now that other end of the pipe has closed.
+wait $TS_PID
 #delete named pipe when finished
 trap 'rm "$PIPEFILE"' EXIT
