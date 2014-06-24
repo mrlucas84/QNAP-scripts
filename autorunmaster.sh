@@ -4,11 +4,11 @@
 # this is called by autorun.sh
 # /share/HDA_DATA/.qpkg/autorun/autorunmaster.sh
 log=/share/HDA_DATA/.qpkg/autorun/autorunmaster.log
-namedpipe=autorunmaster.sh.pipe
+echo "*** Starting autorunmaster.sh" | ts "%F %H:%M:%.S" >> $log
+namedpipe=autorunmaster_sh_pipe
+apache_conf=/etc/config/apache/apache.conf
 alias ts='/opt/bin/ts'
-echo "*** Starting autorunmaster.sh"
 if [ -p $namedpipe ]; then
-	echo "Named pipe $namedpipe exists. Deleting." 
 	rm -f "$namedpipe"
 fi
 # create named pipe
@@ -43,6 +43,22 @@ echo "Delete /etc/ssh/sshd_config and recreate as symlink to /share/HDA_DATA/ssh
 rm -f /etc/ssh/sshd_config
 ln -s /share/HDA_DATA/ssh/sshd_config /etc/ssh/sshd_config
 
+#sobreescribir configuracion apache
+/bin/grep "apache-custom" $apache_conf >/dev/null
+if [ $? = 0 ]
+	then
+		echo "$apache_conf does NOT contain customizations. Including now."
+		echo "Include /share/HDA_DATA/apache/apache-custom.conf" >> $apache_conf
+	else
+		echo "$apache_conf does contain customizations. Nothing to be done."
+fi
+echo "Copying apache SSL custom conf"
+cp -f /share/HDA_DATA/apache/extra/apache-ssl.conf /etc/config/apache/extra/apache-ssl.conf
+
+echo "Restarting apache"
+/etc/init.d/Qthttpd.sh restart
+
+
 # crea enlace a script de transmission para que se ejecute cuando toca.
 #echo "Creating symlink /etc/rcS.d/QS901transmission -> /share/HDA_DATA/Transmission/transmission.sh"
 #/bin/ln -sf /share/HDA_DATA/Transmission/transmission.sh /etc/rcS.d/QS901transmission
@@ -56,7 +72,7 @@ echo "Copying /usr/local/etc/services to /etc/services"
 cp -f /usr/local/etc/services /etc/services
 sleep 2
 export OPTWARE_TARGET=cs08q1armel
-echo "xinetd start"
+echo "Starting xinetd..."
 if [ -e "/opt/sbin/xinetd" ]
 	then
 		/sbin/daemon_mgr xinetd start "/opt/sbin/xinetd"
@@ -73,4 +89,4 @@ exec 1>&- 2>&-
 wait $ts_pid
 #delete named pipe when finished
 trap 'rm "$namedpipe"' EXIT
-echo "*** End of autorunmaster.sh"
+echo "*** End of autorunmaster.sh" | ts "%F %H:%M:%.S" >> $log
