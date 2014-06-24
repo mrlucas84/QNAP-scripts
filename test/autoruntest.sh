@@ -4,9 +4,8 @@
 log=/home/telemarch/autorun/autoruntest.log
 namedpipe=/home/telemarch/autorun/autoruntest_sh_pipe
 alias ts='/home/telemarch/sbin/ts'
-echo "*** Starting autoruntest.sh"  | ts "%F %H:%M:%.S" >> $log
 if [ -p $namedpipe ]; then
-	echo "Named pipe $namedpipe exists. Deleting." | ts "%F %H:%M:%.S" >> $log
+	echo "Named pipe $namedpipe exists. Deleting."
 	rm -f "$namedpipe"
 fi
 # create named pipe
@@ -17,6 +16,7 @@ ts "%F %H:%M:%.S" >> "$log" < "$namedpipe" &
 ts_pid=$!
 # redirect the rest of the stderr and stdout to our named pipe.
 exec > $namedpipe 2>&1
+echo "*** Starting autoruntest.sh"
 
 echo "PATH=$PATH"
 echo "PID of ts: $ts_pid"
@@ -32,4 +32,4 @@ exec 1>&- 2>&-
 wait $ts_pid
 #delete named pipe when finished
 trap 'rm "$namedpipe"' EXIT
-echo "*** End of autoruntest.sh" | ts "%F %H:%M:%.S" >> $log
+echo "*** End of autoruntest.sh"
