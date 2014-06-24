@@ -4,11 +4,11 @@
 # this is called by autorun.sh
 # /share/HDA_DATA/.qpkg/autorun/autorunmaster.sh
 log=/share/HDA_DATA/.qpkg/autorun/autorunmaster.log
-namedpipe=autorunmaster_sh_pipe
+namedpipe=autorunmaster.sh.pipe
 alias ts='/opt/bin/ts'
-echo "*** Starting autorunmaster.sh" | ts "%F %H:%M:%.S" >> $log
+echo "*** Starting autorunmaster.sh"
 if [ -p $namedpipe ]; then
-	echo "Named pipe $namedpipe exists. Deleting." | ts "%F %H:%M:%.S" >> $log
+	echo "Named pipe $namedpipe exists. Deleting." 
 	rm -f "$namedpipe"
 fi
 # create named pipe
@@ -73,4 +73,4 @@ exec 1>&- 2>&-
 wait $ts_pid
 #delete named pipe when finished
 trap 'rm "$namedpipe"' EXIT
-echo "*** End of autorunmaster.sh" | ts "%F %H:%M:%.S" >> $log
+echo "*** End of autorunmaster.sh"
