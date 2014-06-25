@@ -3,7 +3,23 @@
 # con /bin/sh no funciona el redireccionamiento a funcion/process substitution
 log=/home/telemarch/autorun/autoruntest.log
 stdlog=/home/telemarch/autorun/autoruntest_std.log
-echo "$(date '+%F %T') *** Starting autoruntes.sh" >> $log
+log(){
+	echo "[1] $(date '+%F %T.%3N') $1" >> $log
+# otra forma
+#	d=$(date +'%Y-%m-%d %H:%M:%S|%N')
+#	ms=$(( ${d#*|}/1000000 ))
+#	d="${d%|*}.$ms"
+#	echo "[2] $d $1" >> $log
+# otra más esta con printf
+#	timestamp = $(date '+%F %T.%N')
+#	printf '%04d-%02d-%02dT%02d:%02d:%02d.%03d $1' \
+#			$(date -r "${timestamp%.*}" +"%Y %m %d %H %M %S")\
+#			$(( ${timestamp#*.}/1000 )) >> $log
+	printf "[4] %.23s" $(date +'%Y-%m-%dT%H:%M:%S.%N') >> $log
+	
+	echo "" >> $log
+}
+log "*** Starting autoruntes.sh"
 #namedpipe=/home/telemarch/autorun/autoruntest_sh_pipe
 #alias ts='/home/telemarch/sbin/ts'
 #if [ -p $namedpipe ]; then
@@ -19,14 +35,17 @@ echo "$(date '+%F %T') *** Starting autoruntes.sh" >> $log
 ## redirect the rest of the stderr and stdout to our named pipe.
 #exec > $namedpipe 2>&1
 exec > $stdlog 2>&1
-echo "$(date '+%F %T') *** Starting autoruntest.sh" >> $log
+#echo "*** Starting autoruntest.sh"
 
-echo "$(date '+%F %T') PATH=$PATH" >> $log
-#echo "$(date '+%F %T') PID of ts: $ts_pid"
+log "PATH=$PATH"
+#log "PID of ts: $ts_pid"
 #echo "Calling another script subscript.sh"
 #/home/telemarch/autorun/subscript.sh &
 # echo "subscript.sh done."
-
+log "Running command with stdout output"
+ls -la
+log "Running wrong command with stderr output"
+gfrxls
 #echo "Closing output redirection to log file"
 ## close the stderr and stdout file descriptors.
 #exec 1>&- 2>&-
@@ -35,4 +54,4 @@ echo "$(date '+%F %T') PATH=$PATH" >> $log
 #wait $ts_pid
 ##delete named pipe when finished
 #trap 'rm "$namedpipe"' EXIT
-echo "$(date '+%F %T') *** End of autoruntest.sh" >> $log
+log "*** End of autoruntest.sh"
