@@ -4,8 +4,8 @@
 # this is called by autorun.sh
 # /share/HDA_DATA/.qpkg/autorun/autorunmaster.sh
 log=/share/HDA_DATA/.qpkg/autorun/autorunmaster.log
-echo "*** Starting autorunmaster.sh" | ts "%F %H:%M:%.S" >> $log
-namedpipe=autorunmaster_sh_pipe
+#echo "*** Starting autorunmaster.sh" | ts "%F %H:%M:%.S" >> $log
+namedpipe=autorunmaster.sh.pipe
 apache_conf=/etc/config/apache/apache.conf
 alias ts='/opt/bin/ts'
 if [ -p $namedpipe ]; then
@@ -19,6 +19,7 @@ ts "%F %H:%M:%.S" >> $log < $namedpipe &
 ts_pid=$!
 # redirect the rest of the stderr and stdout to our named pipe.
 exec > $namedpipe 2>&1
+echo "*** Starting autorunmaster.sh"
 
 echo "PID of ts: $ts_pid"
 # adding IPKG apps into system path ... 
