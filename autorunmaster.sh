@@ -5,7 +5,7 @@
 # /share/HDA_DATA/.qpkg/autorun/autorunmaster.sh
 #alias ts='/opt/bin/ts'
 log=/share/HDA_DATA/.qpkg/autorun/autorunmaster.log
-stdlog=/share/HDA_DATA/.qpkg/autorun/autorunmaster_std.log
+#stdlog=/share/HDA_DATA/.qpkg/autorun/autorunmaster_std.log
 log(){
 	/bin/echo "$(/bin/date '+%F %T.%3N') $1" >> $log
 }
@@ -24,7 +24,7 @@ apache_custom_conf=/share/HDA_DATA/apache/apache-custom.conf
 #ts_pid=$!
 ## redirect the rest of the stderr and stdout to our named pipe.
 #exec > $namedpipe 2>&1
-exec > $stdlog 2>&1
+exec > $log 2>&1
 #echo "*** Starting autorunmaster.sh"
 
 #echo "PID of ts: $ts_pid"
@@ -40,14 +40,14 @@ log "PATH=$PATH"
 #FIRST start Optware and delete the /etc/rcS.d/QS100...sh
 log "Starting Optware"
 /etc/init.d/Optware.sh start
-rm -f /etc/rcS.d/QS100Optware
+/bin/rm -f /etc/rcS.d/QS100Optware
 log "Optware started"
 log "Setting up custom scripts"
 # Fin Dani 12/11/2011
 
 #sobreescribir config SSH con la propia 
 log "Delete /etc/ssh/sshd_config and recreate as symlink to /share/HDA_DATA/ssh/sshd_config"
-rm -f /etc/ssh/sshd_config
+/bin/rm -f /etc/ssh/sshd_config
 ln -s /share/HDA_DATA/ssh/sshd_config /etc/ssh/sshd_config
 
 #modificar configuracion apache. quiet grep search
@@ -57,7 +57,7 @@ if [ $? -eq 0 ]
 		log "$apache_conf already includes $apache_custom_conf. Nothing to be done."
 	else
 		log "$apache_conf does NOT include $apache_custom_conf. Including now."
-		echo "Include $apache_custom_conf" >> $apache_conf
+		/bin/echo "Include $apache_custom_conf" >> $apache_conf
 		log "Restarting apache"
 		/etc/init.d/Qthttpd.sh restart
 fi
@@ -77,8 +77,8 @@ log "Calling Transmission script /share/HDA_DATA/Transmission/transmission.sh"
 log "Transmission script done."
 
 log "Copying /usr/local/etc/services to /etc/services"
-cp -f /usr/local/etc/services /etc/services
-sleep 2
+/bin/cp -f /usr/local/etc/services /etc/services
+/bin/sleep 2
 export OPTWARE_TARGET=cs08q1armel
 log "Starting xinetd..."
 if [ -e "/opt/sbin/xinetd" ]
@@ -98,3 +98,5 @@ fi
 ##delete named pipe when finished
 #trap 'rm "$namedpipe"' EXIT
 log "***** End of autorunmaster.sh *****"
+/bin/sync
+/bin/sleep 1
