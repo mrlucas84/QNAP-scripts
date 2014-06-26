@@ -19,7 +19,7 @@ if [ -p $namedpipe ]; then
 	rm -f "$namedpipe"
 fi
 # create named pipe
-mkfifo $namedpipe
+/opt/bin/mkfifo $namedpipe
 # Start ts writing to a logfile, but pulling its input from our named pipe.
 ts "%F %H:%M:%.S" >> $log < $namedpipe &
 # capture ts's process ID for the wait command.
@@ -71,4 +71,4 @@ exec 1>&- 2>&-
 wait $ts_pid
 #delete named pipe when finished
 trap 'rm -f "$namedpipe"' EXIT
-echo "*** End of autorunmaster.sh" | ts "%F %H:%M:%.S" >> $log
+echo "*** End of transmission.sh" | ts "%F %H:%M:%.S" >> $log

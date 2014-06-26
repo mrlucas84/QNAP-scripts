@@ -7,11 +7,12 @@
 log=/share/HDA_DATA/.qpkg/autorun/autorunmaster.log
 stdlog=/share/HDA_DATA/.qpkg/autorun/autorunmaster_std.log
 log(){
-	echo "$(date '+%F %T') $1" >> $log
+	/bin/echo "$(/bin/date '+%F %T.%3N') $1" >> $log
 }
-log "*** Starting autorunmaster.sh"
+log "***** Starting autorunmaster.sh *****"
 #namedpipe=/share/HDA_DATA/.qpkg/autorun/autorunmaster.sh.pipe
 apache_conf=/etc/config/apache/apache.conf
+apache_custom_conf=/share/HDA_DATA/apache/apache-custom.conf
 #if [ -p $namedpipe ]; then
 #	rm -f "$namedpipe"
 #fi
@@ -49,16 +50,16 @@ log "Delete /etc/ssh/sshd_config and recreate as symlink to /share/HDA_DATA/ssh/
 rm -f /etc/ssh/sshd_config
 ln -s /share/HDA_DATA/ssh/sshd_config /etc/ssh/sshd_config
 
-#sobreescribir configuracion apache
-/bin/grep "apache-custom" $apache_conf >/dev/null
-if [ $? = 0 ]
+#modificar configuracion apache. quiet grep search
+/bin/grep -q $apache_custom_conf $apache_conf
+if [ $? -eq 0 ]
 	then
-		log "$apache_conf does NOT contain customizations. Including now."
-		log "Include /share/HDA_DATA/apache/apache-custom.conf" >> $apache_conf
+		log "$apache_conf already includes $apache_custom_conf. Nothing to be done."
+	else
+		log "$apache_conf does NOT include $apache_custom_conf. Including now."
+		echo "Include $apache_custom_conf" >> $apache_conf
 		log "Restarting apache"
 		/etc/init.d/Qthttpd.sh restart
-	else
-		log "$apache_conf already contains customizations. Nothing to be done."
 fi
 #echo "Copying apache SSL custom conf" >> $log
 #cp -f /share/HDA_DATA/apache/extra/apache-ssl.conf /etc/config/apache/extra/apache-ssl.conf
@@ -96,4 +97,4 @@ fi
 #wait $ts_pid
 ##delete named pipe when finished
 #trap 'rm "$namedpipe"' EXIT
-log "*** End of autorunmaster.sh"
+log "***** End of autorunmaster.sh *****"
