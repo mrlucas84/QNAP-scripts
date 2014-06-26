@@ -24,7 +24,7 @@ apache_custom_conf=/share/HDA_DATA/apache/apache-custom.conf
 #ts_pid=$!
 ## redirect the rest of the stderr and stdout to our named pipe.
 #exec > $namedpipe 2>&1
-exec > $log 2>&1
+exec >> $log 2>&1
 #echo "*** Starting autorunmaster.sh"
 
 #echo "PID of ts: $ts_pid"
@@ -48,7 +48,7 @@ log "Setting up custom scripts"
 #sobreescribir config SSH con la propia 
 log "Delete /etc/ssh/sshd_config and recreate as symlink to /share/HDA_DATA/ssh/sshd_config"
 /bin/rm -f /etc/ssh/sshd_config
-ln -s /share/HDA_DATA/ssh/sshd_config /etc/ssh/sshd_config
+/bin/ln -s /share/HDA_DATA/ssh/sshd_config /etc/ssh/sshd_config
 
 #modificar configuracion apache. quiet grep search
 /bin/grep -q $apache_custom_conf $apache_conf
