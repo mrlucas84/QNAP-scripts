@@ -24,14 +24,26 @@ if [ -z $VOL_BASE ] ; then
 fi
 }
 
+#change_apache()
+#{
+#	/bin/grep -q cnx_user /etc/default_config/apache-sys-proxy-ssl.conf.tplt
+#	if [ $? -eq 0 ] ; then
+#		echo "cnx_user is already in base of ssl proxy"
+#	else
+#		NBL=`/bin/grep -n ProxyPass /etc/default_config/apache-sys-proxy-ssl.conf.tplt | /usr/bin/head -n 1 | /bin/cut -d: -f1`
+#		sed -i "${NBL}i\ProxyPass /cnx_user http://127.0.0.1:4200/cnx_user" /etc/default_config/apache-sys-proxy-ssl.conf.tplt
+#		/etc/init.d/stunnel.sh restart
+#	fi
+#}
 change_apache()
 {
-	/bin/grep -q cnx_user /etc/default_config/apache-sys-proxy-ssl.conf.tplt
+	/bin/grep -q cnx_user /etc/default_config/apache-sys-proxy.conf.tplt
 	if [ $? -eq 0 ] ; then
-		echo "cnx_user is already in base of ssl proxy"
+		echo "cnx_user is already in base of http proxy"
 	else
-		NBL=`/bin/grep -n ProxyPass /etc/default_config/apache-sys-proxy-ssl.conf.tplt | /usr/bin/head -n 1 | /bin/cut -d: -f1`
-		sed -i "${NBL}i\ProxyPass /cnx_user http://127.0.0.1:4200/cnx_user" /etc/default_config/apache-sys-proxy-ssl.conf.tplt
+		echo "cnx_user is NOT in base of http proxy. Setting it up."
+		NBL=`/bin/grep -n ProxyPass /etc/default_config/apache-sys-proxy.conf.tplt | /usr/bin/head -n 1 | /bin/cut -d: -f1`
+		sed -i "${NBL}i\ProxyPass /cnx_user http://127.0.0.1:4200/cnx_user" /etc/default_config/apache-sys-proxy.conf.tplt
 		/etc/init.d/stunnel.sh restart
 	fi
 }
@@ -80,16 +92,17 @@ start)
                 fi
         fi
 ### please test if ssl is configured ...
-	REP=`/sbin/getcfg Stunnel Enable -d 0`
-	if [ $REP -eq 0 ] ; then
-		/sbin/log_tool -t 2 -a "SSL is NOT enable for Web Admin ... shellinabox can't start"
-		exit 1
-	fi
+#	REP=`/sbin/getcfg Stunnel Enable -d 0`
+#	if [ $REP -eq 0 ] ; then
+#		/sbin/log_tool -t 2 -a "SSL is NOT enable for Web Admin ... shellinabox can't start"
+#		exit 1
+#	fi
 ###
 #	PORT=`/sbin/getcfg Stunnel Port -d 443`
 #	/sbin/setcfg shellinabox Web_Port $PORT -f /etc/config/qpkg.conf
 	rm -f /tmp/shellinabox.log
-	/sbin/daemon_mgr shellinaboxd start "/myprog/shellinabox/bin/shellinaboxd -u guest -g guest --background=/tmp/shellinaboxd.pid -t --disable-ssl-menu --localhost-only -f favicon.ico:/myprog/shellinabox/favicon.ico -s /cnx_user:guest:guest:/tmp:/myprog/shellinabox/cnx_user.sh 1>/dev/null 2>/tmp/shellinabox.log &"
+#	/sbin/daemon_mgr shellinaboxd start "/myprog/shellinabox/bin/shellinaboxd -u guest -g guest --background=/tmp/shellinaboxd.pid -t --disable-ssl-menu --localhost-only -f favicon.ico:/myprog/shellinabox/favicon.ico -s /cnx_user:guest:guest:/tmp:/myprog/shellinabox/cnx_user.sh 1>/dev/null 2>/tmp/shellinabox.log &"
+	/sbin/daemon_mgr shellinaboxd start "/myprog/shellinabox/bin/shellinaboxd -u guest -g guest --background=/tmp/shellinaboxd.pid --disable-ssl -f favicon.ico:/myprog/shellinabox/favicon.ico -s /cnx_user:guest:guest:/tmp:/myprog/shellinabox/cnx_user.sh 1>/dev/null 2>/tmp/shellinabox.log &"
 	/sbin/log_tool -t 0 -a "shellinabox server is started "
 ;;
 
