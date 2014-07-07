@@ -35,18 +35,18 @@ fi
 #		/etc/init.d/stunnel.sh restart
 #	fi
 #}
-change_apache()
-{
-	/bin/grep -q cnx_user /etc/default_config/apache-sys-proxy.conf.tplt
-	if [ $? -eq 0 ] ; then
-		echo "cnx_user is already in base of http proxy"
-	else
-		echo "cnx_user is NOT in base of http proxy. Setting it up."
-		NBL=`/bin/grep -n ProxyPass /etc/default_config/apache-sys-proxy.conf.tplt | /usr/bin/head -n 1 | /bin/cut -d: -f1`
-		sed -i "${NBL}i\ProxyPass /cnx_user http://127.0.0.1:4200/cnx_user" /etc/default_config/apache-sys-proxy.conf.tplt
-		/etc/init.d/stunnel.sh restart
-	fi
-}
+#change_apache()
+#{
+#	/bin/grep -q cnx_user /etc/default_config/apache-sys-proxy.conf.tplt
+#	if [ $? -eq 0 ] ; then
+#		echo "cnx_user is already in base of http proxy"
+#	else
+#		echo "cnx_user is NOT in base of http proxy. Setting it up."
+#		NBL=`/bin/grep -n ProxyPass /etc/default_config/apache-sys-proxy.conf.tplt | /usr/bin/head -n 1 | /bin/cut -d: -f1`
+#		sed -i "${NBL}i\ProxyPass /cnx_user http://127.0.0.1:4200/cnx_user" /etc/default_config/apache-sys-proxy.conf.tplt
+#		/etc/init.d/stunnel.sh restart
+#	fi
+#}
 ########### START of SHELL script
 make_base
 ####
@@ -72,7 +72,7 @@ if [ ! -e /root/.shellinabox_lock ] ; then
 		rm -f /share/Qweb/cnx_user
 		ln -s /myprog/shellinabox/www /share/QWeb/cnx_user
 	fi
-	change_apache
+#	change_apache
 	touch /root/.shellinabox_lock
         /sbin/log_tool -t 0 -a "shellinabox environment is set"
 fi
@@ -102,7 +102,7 @@ start)
 #	/sbin/setcfg shellinabox Web_Port $PORT -f /etc/config/qpkg.conf
 	rm -f /tmp/shellinabox.log
 #	/sbin/daemon_mgr shellinaboxd start "/myprog/shellinabox/bin/shellinaboxd -u guest -g guest --background=/tmp/shellinaboxd.pid -t --disable-ssl-menu --localhost-only -f favicon.ico:/myprog/shellinabox/favicon.ico -s /cnx_user:guest:guest:/tmp:/myprog/shellinabox/cnx_user.sh 1>/dev/null 2>/tmp/shellinabox.log &"
-	/sbin/daemon_mgr shellinaboxd start "/myprog/shellinabox/bin/shellinaboxd -u guest -g guest --background=/tmp/shellinaboxd.pid --disable-ssl -f favicon.ico:/myprog/shellinabox/favicon.ico -s /cnx_user:guest:guest:/tmp:/myprog/shellinabox/cnx_user.sh 1>/dev/null 2>/tmp/shellinabox.log &"
+	/sbin/daemon_mgr shellinaboxd start "/myprog/shellinabox/bin/shellinaboxd -u guest -g guest --background=/tmp/shellinaboxd.pid --localhost-only --disable-ssl -f favicon.ico:/myprog/shellinabox/favicon.ico -s /cnx_user:guest:guest:/tmp:/myprog/shellinabox/cnx_user.sh 1>/dev/null 2>/tmp/shellinabox.log &"
 	/sbin/log_tool -t 0 -a "shellinabox server is started "
 ;;
 
