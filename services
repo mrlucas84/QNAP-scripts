@@ -304,3 +304,4 @@ fido            60179/tcp			# Ifmail
 fido            60179/udp			# Ifmail
 
 # Local services
+kms				1688/tcp			#vlmcsd KMS licensing server
