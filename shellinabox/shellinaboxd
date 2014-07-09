@@ -1,0 +1,16 @@
+# vlmcsd xinetd config
+# /share/HDA_DATA/.qpkg/Optware/etc/xinetd.d/shellinaboxd
+service shellinaboxd
+{
+        socket_type = stream
+#       type = UNLISTED		# Allow a TCP port that is not listed in /etc/services
+        port = 4200
+        protocol = tcp
+        wait = no
+        user = admin
+		group = administrators
+        server = /share/HDA_DATA/.qpkg/shellinabox/bin/shellinaboxd
+        server_args = -u guest -g guest --background=/tmp/shellinaboxd.pid --localhost-only --disable-ssl -f favicon.ico:/myprog/shellinabox/terminal.ico --css=/share/HDA_DATA/shellinabox/share/doc/shellinabox/white-on-black.css -s /cnx_user:guest:guest:/tmp:/myprog/shellinabox/cnx_user.sh 1>/dev/null 2>/tmp/shellinabox.log
+        flags = IPv4
+        disable = no
+}

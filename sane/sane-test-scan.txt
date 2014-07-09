@@ -1,0 +1,2 @@
+scanimage -L
+scanimage -d hpaio:/usb/Deskjet_F4100_series?serial=CN79P5W1TT04TJ --test
