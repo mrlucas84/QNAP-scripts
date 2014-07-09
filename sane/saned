@@ -1,0 +1,12 @@
+# /share/HDA_DATA/.qpkg/Optware/etc/xinetd.d/saned
+service sane-port
+{
+	port			= 6566
+	socket_type		= stream
+	server			= /opt/sbin/saned
+	protocol		= tcp
+	user			= admin
+	group			= administrators
+	wait			= no
+	disable			= no
+}
