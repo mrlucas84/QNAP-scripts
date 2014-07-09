@@ -306,3 +306,4 @@ fido            60179/udp			# Ifmail
 # Local services
 kms				1688/tcp			#vlmcsd KMS licensing server
 sane-port		6566/tcp			#saned scanner server
+shellinabox		4200/tcp			#shell in a box daemon
