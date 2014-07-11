@@ -1,3 +1,4 @@
+
 #!/bin/sh
 make_base(){
 # Determine BASE installation location according to smb.conf
@@ -83,11 +84,11 @@ start)
 	REP=`/sbin/getcfg shellinabox Enable -u -d FALSE -f /etc/config/qpkg.conf`
         if [ "$REP" != "TRUE" ] ; then
                 if [ "${2}" = "force" ] ; then
-                        echo " OK Enable is FALSE but force action  ... it's your responsability !!!! "
+                        echo " OK enable is FALSE but force action  ... it's your responsability !!!! "
                         shift
                 else
                         echo "shellinabox is not Enable"
-                        /sbin/log_tool -t 2 -a "shellinabox is Disable can't be started ... "
+                        /sbin/log_tool -t 2 -a "shellinabox is disabled can't be started ... "
                         exit 1
                 fi
         fi
@@ -102,9 +103,13 @@ start)
 #	/sbin/setcfg shellinabox Web_Port $PORT -f /etc/config/qpkg.conf
 	rm -f /tmp/shellinabox.log
 #	/sbin/daemon_mgr shellinaboxd start "/myprog/shellinabox/bin/shellinaboxd -u guest -g guest --background=/tmp/shellinaboxd.pid -t --disable-ssl-menu --localhost-only -f favicon.ico:/myprog/shellinabox/favicon.ico -s /cnx_user:guest:guest:/tmp:/myprog/shellinabox/cnx_user.sh 1>/dev/null 2>/tmp/shellinabox.log &"
+#	/sbin/daemon_mgr shellinaboxd start "/myprog/shellinabox/bin/shellinaboxd -d -u guest -g guest --background=/tmp/shellinaboxd.pid --localhost-only --disable-ssl -f favicon.ico:/myprog/shellinabox/terminal.ico -f ShellInABox.js:/share/HDA_DATA/.qpkg/shellinabox/test/vt100.js -s /cnx_user:guest:guest:/tmp:/myprog/shellinabox/cnx_user.sh >/tmp/shellinabox.log 2>&1 &"
 
-#PRUEBA /usr/bin/shellinaboxd -q --background=/var/run/shellinaboxd.pid -c /var/lib/shellinabox -p 4200 -u shellinabox -g shellinabox --user-css Black on White:+/etc/shellinabox/options-enabled/00+Black on White.css,White On Black:-/etc/shellinabox/options-enabled/00_White On Black.css;Color Terminal:+/etc/shellinabox/options-enabled/01+ColorTerminal.css,Monochrome:-/etc/shellinabox/options-enabled/01_Monochrome.css -s/:LOGIN -t --no-beep
-	/sbin/daemon_mgr shellinaboxd start "/myprog/shellinabox/bin/shellinaboxd -u guest -g guest --background=/tmp/shellinaboxd.pid --localhost-only --disable-ssl -f favicon.ico:/myprog/shellinabox/terminal.ico --css=/share/HDA_DATA/shellinabox/share/doc/shellinabox/white-on-black.css -s /cnx_user:guest:guest:/tmp:/myprog/shellinabox/cnx_user.sh 1>/dev/null 2>/tmp/shellinabox.log &"
+	/sbin/daemon_mgr shellinaboxd start "/myprog/shellinabox/bin/shellinaboxd -d -u guest -g guest --background=/tmp/shellinaboxd.pid \
+	--localhost-only --disable-ssl -f favicon.ico:/myprog/shellinabox/terminal.ico \
+	-s /cnx_user:guest:guest:/tmp:/myprog/shellinabox/cnx_user.sh \
+	--user-css WhiteOnBlack:+/share/HDA_DATA/.qpkg/shellinabox/share/doc/shellinabox/white-on-black.css,\Color:-/share/HDA_DATA/.qpkg/shellinabox/share/doc/shellinabox/color.css \
+	1>/dev/null 2>/tmp/shellinabox.log &"
 	/sbin/log_tool -t 0 -a "shellinabox server is started "
 ;;
 
@@ -131,9 +136,9 @@ set_admin)
 status)
 	REP=`/sbin/getcfg shellinabox Enable -u -d FALSE -f /etc/config/qpkg.conf`
         if [ "$REP" != "TRUE" ] ; then
-		echo " SIAB is Disable"
+		echo " SIAB is disabled"
 	else
-		echo " SIAB is Enable"
+		echo " SIAB is enabled"
 		REP=`/sbin/getcfg SIAB Auth_user -d "INVALID_VALUE" -f /myprog/shellinabox/shellinabox.conf`
 		echo " SIAB Authorised user is : $REP "
 		PORT=`/sbin/getcfg Stunnel Port -d 443`
@@ -147,7 +152,7 @@ status)
 	fi
 ;;
 log)
-	echo " SIAB log (generally empty ... )"
+	echo " SIAB log...)"
 	cat /tmp/shellinabox.log
 	echo " SIAB end of log"
 ;;
