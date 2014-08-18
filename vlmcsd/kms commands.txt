@@ -1,0 +1,30 @@
+WINDOWS 8.1
+===========
+verbose output of the Software Licensing service
+slmgr.vbs /dlv
+cscript c:\Windows\System32\slmgr.vbs /dlv all  (terminal output)
+
+Manually assign a KMS host to KMS clients by using KMS host caching
+slmgr.vbs /skms <value>:<port>
+
+Manually activate KMS clients
+slmgr.vbs /ato
+
+View license expiration
+slmgr /xpr
+
+SERVER
+vlmcsd -4 -l /share/HDA_DATA/kms-vlmcsd/vlmcsd.log
+
+netstat -ptln : show listening processes and their IP & ports
+
+
+OFFICE 2013
+===========
+Activation status
+cd "c:\Program Files\Microsoft Office\Office15"
+cscript ospp.vbs /dstatus
+
+Manual activation
+cd "c:\Program Files\Microsoft Office\Office15"
+cscript ospp.vbs /act
