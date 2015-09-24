@@ -1,0 +1,11 @@
+QNAP Apache Web server paths
+
+Installation/home dir: /mnt/ext/opt/apache
+Config dir: /mnt/ext/opt/apache/conf --> /etc/config/apache
+Log dir: /mnt/ext/opt/apache/logs
+
+My custom apache stuff dir: /share/HDA_DATA/apache
+My custom config: /share/HDA_DATA/apache/apache-custom.conf
+My apache SSL certs: 
+	/share/HDA_DATA/apache/my-rootCA.crt
+	/share/HDA_DATA/apache/my-server.crt
