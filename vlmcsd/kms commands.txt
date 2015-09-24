@@ -1,16 +1,25 @@
+http://forums.mydigitallife.info/threads/50234-Emulated-KMS-Servers-on-non-Windows-platforms
+
 WINDOWS 8.1
 ===========
-verbose output of the Software Licensing service
-slmgr.vbs /dlv
-cscript c:\Windows\System32\slmgr.vbs /dlv all  (terminal output)
+cd "%SystemRoot%\SYSTEM32" 
+	or
+cd c:\Windows\System32\
 
-Manually assign a KMS host to KMS clients by using KMS host caching
+Verbose output of the Software Licensing service
+slmgr.vbs /dlv
+cscript /nologo slmgr.vbs /dlv all  (terminal output)
+
+Manually assign a KMS host (IP ADDRESS OR HOSTNAME) to KMS clients by using KMS host caching
 slmgr.vbs /skms <value>:<port>
+cscript /nologo slmgr.vbs /skms <value>:<port>
 
 Manually activate KMS clients
+cscript /nologo slmgr.vbs /ato
 slmgr.vbs /ato
 
 View license expiration
+cscript /nologo slmgr.vbs /xpr
 slmgr /xpr
 
 SERVER
@@ -19,7 +28,7 @@ vlmcsd -4 -l /share/HDA_DATA/kms-vlmcsd/vlmcsd.log
 netstat -ptln : show listening processes and their IP & ports
 
 
-OFFICE 2013
+OFFICE / Project/Visio 2013
 ===========
 Activation status
 cd "c:\Program Files\Microsoft Office\Office15"
@@ -28,3 +37,6 @@ cscript ospp.vbs /dstatus
 Manual activation
 cd "c:\Program Files\Microsoft Office\Office15"
 cscript ospp.vbs /act
+
+Set KMS host??
+CSCRIPT OSPP.VBS /SETHST:192.168.0.xxx
