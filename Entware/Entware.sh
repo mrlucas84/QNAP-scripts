@@ -27,7 +27,10 @@ case "$1" in
 	# adding opkg apps into system path ...
 	/bin/cat /etc/profile | /bin/grep "PATH" | /bin/grep "/opt/bin" 1>>/dev/null 2>>/dev/null
 	if [ $? -ne 0 ]; then
-		/bin/echo "export PATH=\$PATH:/opt/bin:/opt/sbin" >> /etc/profile
+		#Dani 01/10/2015
+		# Bug fix for following: put OPKG first, per http://forum.qnap.com/viewtopic.php?f=124&t=15663
+		# was /bin/echo "export PATH=\$PATH:/opt/bin:/opt/sbin" >> /etc/profile
+		/bin/echo "export PATH=/opt/bin:/opt/sbin:\$PATH" >> /etc/profile
 		/bin/echo "export TERMINFO=/opt/share/terminfo" >> /etc/profile
 		/bin/echo "export TERM=xterm-color">> /etc/profile
 		/bin/echo "export TMP=/opt/tmp" >> /etc/profile
