@@ -20,8 +20,8 @@ log(){
 	echo "" >> $log
 }
 log "*** Starting autoruntes.sh"
-#namedpipe=/home/telemarch/autorun/autoruntest_sh_pipe
-#alias ts='/home/telemarch/sbin/ts'
+#namedpipe=/home/b4nd0ler0/autorun/autoruntest_sh_pipe
+#alias ts='/home/b4nd0ler0/sbin/ts'
 #if [ -p $namedpipe ]; then
 #	echo "Named pipe $namedpipe exists. Deleting."
 #	rm -f "$namedpipe"
@@ -40,7 +40,7 @@ exec > $stdlog 2>&1
 log "PATH=$PATH"
 #log "PID of ts: $ts_pid"
 #echo "Calling another script subscript.sh"
-#/home/telemarch/autorun/subscript.sh &
+#/home/b4nd0ler0/autorun/subscript.sh &
 # echo "subscript.sh done."
 log "Running command with stdout output"
 ls -la
