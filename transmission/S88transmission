@@ -1,8 +1,9 @@
 #!/bin/sh
+#path: /opt/etc/init.d
 
 ENABLED=yes
 PROCS=transmission-daemon
-ARGS="-g /opt/etc/transmission"
+ARGS="--config-dir /share/CACHEDEV1_DATA/myprograms/transmission --logfile /opt/var/log/transmission-daemon.log"
 PREARGS=""
 DESC=$PROCS
 PATH=/opt/sbin:/opt/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
