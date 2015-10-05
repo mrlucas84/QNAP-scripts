@@ -1,8 +1,9 @@
 #!/bin/sh
 # con /opt/bin/bash parece que no se lanza en boot
 # con /bin/sh no funciona el redireccionamiento a funcion/process substitution
-# this is called by autorun.sh
-# /share/HDA_DATA/.qpkg/autorun/autorunmaster.sh
+# this is called by /tmp/config/autorun.sh mounted from /dev/mtdblock6 (ubifs)
+# mount with /share/CACHEDEV1_DATA/myprograms/autorun/cfgdev.sh (/sbin/hal_app --get_boot_pd port_id=0)
+# /share/CACHEDEV1_DATA/myprograms/autorun
 
 log=/share/CACHEDEV1_DATA/myprograms/autorun/autorunmaster.log
 log(){
@@ -22,8 +23,8 @@ exec >> $log 2>&1
 #[ $? -ne 0 ] && /bin/echo "export PATH=/opt/bin:/opt/sbin:\$PATH" >> /etc/profile
 log "PATH=$PATH"
 
-#Dani 12/11/2011 modificado segun http://forum.qnap.com/viewtopic.php?f=85&t=18977
-#FIRST start Entware and delete the /etc/rcS.d/QS100...sh
+#Dani 01/10/2015 modificado segun http://forum.qnap.com/viewtopic.php?f=85&t=18977
+#FIRST start Entware and delete the /etc/rcS.d/QS10.... script
 log "Starting Entware"
 /etc/init.d/Entware.sh start
 /bin/rm -f /etc/rcS.d/QS105Entware
