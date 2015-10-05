@@ -1,0 +1,4 @@
+/etc/profile: export PATH=$PATH:/opt/bin:/opt/sbin
+/root/.profile: no path set
+/opt/etc/profile: export PATH=/opt/bin:/opt/sbin:$PATH
+/root/.bash_profile: export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/bin/X11:/usr/local/bin
