@@ -25,24 +25,16 @@ case "$1" in
 	/bin/rm -rf /opt
 	/bin/ln -sf $QPKG_DIR /opt
 	# adding opkg apps into system path ...
-	/bin/cat /etc/profile | /bin/grep "PATH" | /bin/grep "/opt/bin" 1>>/dev/null 2>>/dev/null
-	if [ $? -ne 0 ]; then
-		#Dani 01/10/2015
-		# Bug fix for following: put OPKG first, per http://forum.qnap.com/viewtopic.php?f=124&t=15663
-		# was /bin/echo "export PATH=\$PATH:/opt/bin:/opt/sbin" >> /etc/profile
-		/bin/echo "export PATH=/opt/bin:/opt/sbin:\$PATH" >> /etc/profile
-		/bin/echo "export TERMINFO=/opt/share/terminfo" >> /etc/profile
-		/bin/echo "export TERM=xterm-color">> /etc/profile
-		/bin/echo "export TMP=/opt/tmp" >> /etc/profile
-		/bin/echo "export TEMP=/opt/tmp" >> /etc/profile
-	fi
-	# startup Entware services
+	#Dani 07/10/2015
+	#Put OPKG first, per http://forum.qnap.com/viewtopic.php?f=351&t=103538&start=90#p506731 
+	/bin/cat /root/.profile | /bin/grep ". " | /bin/grep "/opt/etc/profile" 1>>/dev/null 2>>/dev/null
+	[ $? -ne 0 ] && /bin/echo ". /opt/etc/profile" >> /root/.profile
 	/opt/etc/init.d/rc.unslung start
     ;;
   stop)
   	/bin/echo "Disable Entware/opkg"
 	/opt/etc/init.d/rc.unslung stop
-	
+	/bin/sed -i '/\. \/opt\/etc\/profile/d' /root/.profile
 	/bin/sync
 	/bin/sleep 1
 	;;
