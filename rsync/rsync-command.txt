@@ -1,0 +1,10 @@
+rsync -aAX --info=progress2 /* /path/to/backup/folder
+ -a, --archive		archive mode; equals -rlptgoD (no -H,-A,-X)
+ -A, --acls         preserve ACLs (implies --perms)
+ -X, --xattrs		extended attr
+ -P  --partial --progress
+ 
+ 
+  -W, --whole-file            copy files whole (without delta-xfer algorithm)
+  
+  --dry-run
