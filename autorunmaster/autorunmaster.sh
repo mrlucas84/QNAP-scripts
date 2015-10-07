@@ -11,7 +11,7 @@ log(){
 }
 log "***** Starting autorunmaster.sh *****"
 # apache_conf=/etc/config/apache/apache.conf
-# apache_custom_conf=/share/HDA_DATA/apache/apache-custom.conf
+# apache_custom_conf=/share/CACHEDEV1_DATA/myprograms/apache/apache-custom.conf
 
 exec >> $log 2>&1
 
@@ -23,12 +23,13 @@ exec >> $log 2>&1
 #[ $? -ne 0 ] && /bin/echo "export PATH=/opt/bin:/opt/sbin:\$PATH" >> /etc/profile
 log "PATH=$PATH"
 
+#Dani 07/10/2015 esto se inicia automáticamente vía /etc/init.d/Entware.sh->/share/CACHEDEV1_DATA/.qpkg/Entware/Entware.sh
 #Dani 01/10/2015 modificado segun http://forum.qnap.com/viewtopic.php?f=85&t=18977
 #FIRST start Entware and delete the /etc/rcS.d/QS10.... script
-log "Starting Entware"
-/etc/init.d/Entware.sh start
-/bin/rm -f /etc/rcS.d/QS105Entware
-log "Entware started"
+#log "Starting Entware"
+#/etc/init.d/Entware.sh start
+#/bin/rm -f /etc/rcS.d/QS105Entware
+#log "Entware started"
 log "Setting up custom scripts"
 # Fin Dani 01/10/2015
 
@@ -38,17 +39,18 @@ log "Setting up custom scripts"
 # /bin/ln -s /share/HDA_DATA/ssh/sshd_config /etc/ssh/sshd_config
 
 #modificar configuracion apache. quiet grep search
-# /bin/grep -q $apache_custom_conf $apache_conf
-# if [ $? -eq 0 ]
-	# then
-		# log "$apache_conf already includes $apache_custom_conf. Nothing to be done."
-	# else
-		# log "$apache_conf does NOT include $apache_custom_conf. Including now."
-		# /bin/echo "Include $apache_custom_conf" >> $apache_conf
-		# log "Restarting apache"
-		# /etc/init.d/Qthttpd.sh restart
-# fi
+/bin/grep -q $apache_custom_conf $apache_conf
+if [ $? -eq 0 ]; then
+	log "$apache_conf already includes $apache_custom_conf. Nothing to be done."
+else
+	log "$apache_conf does NOT include $apache_custom_conf. Including now."
+	/bin/echo "Include $apache_custom_conf" >> $apache_conf
+	log "Restarting apache"
+	/etc/init.d/Qthttpd.sh restart
+fi
 
+#Dani 07/10/2015 esto se inicia automáticamente desde /etc/init.d/Entware.sh que 
+#a la larga llama /share/CACHEDEV1_DATA/.qpkg/Entware/etc/init.d/S88transmission
 # crea enlace a script de transmission para que se ejecute cuando toca.
 #echo "Creating symlink /etc/rcS.d/QS901transmission -> /share/HDA_DATA/Transmission/transmission.sh"
 #/bin/ln -sf /share/HDA_DATA/Transmission/transmission.sh /etc/rcS.d/QS901transmission
