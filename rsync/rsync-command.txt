@@ -1,10 +1,21 @@
 rsync -aAX --info=progress2 /* /path/to/backup/folder
- -a, --archive		archive mode; equals -rlptgoD (no -H,-A,-X)
- -A, --acls         preserve ACLs (implies --perms)
- -X, --xattrs		extended attr
- -P  --partial --progress
+ -a, --archive			archive mode; equals -rlptgoD (no -H,-A,-X)
+ -A, --acls         	preserve ACLs (implies --perms)
+ -X, --xattrs			extended attr
+     --partial			keep partially transferred files
+     --partial-dir=DIR	put a partially transferred file into DIR
+ -P  					same as --partial --progress
  
  
-  -W, --whole-file            copy files whole (without delta-xfer algorithm)
-  
-  --dry-run
+ -W, --whole-file		copy files whole (without delta-xfer algorithm)
+ -n, --dry-run
+	 --numeric-ids		don't map uid/gid values by user/group name
+ -h, --human-readable	output numbers in a human-readable format
+ -r, --recursive		recurse into directories
+
+ 
+rsync -aAXPW --numeric-ids /media/qnap/Public  rsync@diogenes2.lan::Public
+
+rsync --dry-run -aAXPW --numeric-ids /share/HDA_DATA/Qdownload  rsync@diogenes2.lan::Download
+
+rsync -rv --dry-run --delete rsync@diogenes2.lan::Public/Public /media/qnap/Public/
