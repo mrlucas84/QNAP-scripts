@@ -10,8 +10,8 @@ log(){
 	/bin/echo "$(/bin/date '+%F %T.%3N') $1" >> $log
 }
 log "***** Starting autorunmaster.sh *****"
-# apache_conf=/etc/config/apache/apache.conf
-# apache_custom_conf=/share/CACHEDEV1_DATA/myprograms/apache/apache-custom.conf
+apache_conf=/etc/config/apache/apache.conf
+apache_custom_conf=/share/CACHEDEV1_DATA/myprograms/apache/apache-custom.conf
 
 exec >> $log 2>&1
 
@@ -30,9 +30,9 @@ log "PATH=$PATH"
 #/etc/init.d/Entware.sh start
 #/bin/rm -f /etc/rcS.d/QS105Entware
 #log "Entware started"
-log "Setting up custom scripts"
 # Fin Dani 01/10/2015
 
+log "Setting up custom scripts"
 #sobreescribir config SSH con la propia 
 # log "Delete /etc/ssh/sshd_config and recreate as symlink to /share/HDA_DATA/ssh/sshd_config"
 # /bin/rm -f /etc/ssh/sshd_config
