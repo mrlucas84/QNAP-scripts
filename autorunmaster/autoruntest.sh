@@ -5,7 +5,6 @@ log=/share/CACHEDEV1_DATA/myprograms/autorun/autoruntest.log
 stdlog=/share/CACHEDEV1_DATA/myprograms/autorun/autoruntest_std.log
 log(){
 	/bin/echo "$(/bin/date '+%F %T.%3N') $1" >> $log
-	/bin/echo "" >> $log
 #	printf "[4] %.23s" $(/bin/date +'%Y-%m-%dT%H:%M:%S.%N') >> $log
 }
 log "*** Starting autoruntest.sh"
