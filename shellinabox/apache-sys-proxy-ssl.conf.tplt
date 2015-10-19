@@ -1,0 +1,264 @@
+#ServerType standalone
+ServerRoot "/usr/local/apache"
+ServerName localhost
+LockFile /var/lock/apache_proxys.lock
+PidFile /var/lock/apache_proxys.pid
+#ScoreBoardFile /usr/local/apache/logs/apache_proxys.scoreboard
+Timeout 360
+KeepAlive On
+MaxKeepAliveRequests 100
+KeepAliveTimeout 15
+MinSpareServers 2
+MaxSpareServers 6
+StartServers 2
+MaxClients 128
+MaxRequestsPerChild 30
+Listen @SYS_HTTPS_PORT@
+User admin
+Group administrators
+ServerAdmin admin@NAS
+#ServerName NAS
+TraceEnable off
+ServerTokens Prod
+DocumentRoot "/home/httpd"
+<Directory />
+	Options FollowSymLinks
+	AllowOverride All
+	Order deny,allow
+	Deny from all
+</Directory>
+<IfModule dir_module>
+		DirectoryIndex index.html index.htm index.php
+</IfModule>
+AccessFileName .htaccess
+<FilesMatch "^\.ht">
+    Order allow,deny
+    Deny from all
+    Satisfy All
+</FilesMatch>
+UseCanonicalName Off
+HostnameLookups Off
+DefaultType text/plain
+ErrorLog /dev/null
+LogLevel crit
+<IfModule log_config_module>
+    LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+    LogFormat "%h %l %u %t \"%r\" %>s %b" common
+		LogFormat "%{Referer}i -> %U" referer
+		LogFormat "%{User-agent}i" agent
+
+    <IfModule logio_module>
+      LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" %I %O" combinedio
+    </IfModule>
+</IfModule>
+
+ServerSignature On
+
+<IfModule autoindex_module>
+		AddIconByEncoding (CMP,/icons/compressed.gif) x-compress x-gzip
+		AddIconByType (TXT,/icons/text.gif) text/*
+		AddIconByType (IMG,/icons/image2.gif) image/*
+		AddIconByType (SND,/icons/sound2.gif) audio/*
+		AddIconByType (VID,/icons/movie.gif) video/*
+		AddIcon /icons/binary.gif .bin .exe
+		AddIcon /icons/binhex.gif .hqx
+		AddIcon /icons/tar.gif .tar
+		AddIcon /icons/world2.gif .wrl .wrl.gz .vrml .vrm .iv
+		AddIcon /icons/compressed.gif .Z .z .tgz .gz .zip
+		AddIcon /icons/a.gif .ps .ai .eps
+		AddIcon /icons/layout.gif .html .shtml .htm .pdf
+		AddIcon /icons/text.gif .txt
+		AddIcon /icons/c.gif .c
+		AddIcon /icons/p.gif .pl .py
+		AddIcon /icons/f.gif .for
+		AddIcon /icons/dvi.gif .dvi
+		AddIcon /icons/uuencoded.gif .uu
+		AddIcon /icons/script.gif .conf .sh .shar .csh .ksh .tcl
+		AddIcon /icons/tex.gif .tex
+		AddIcon /icons/bomb.gif core
+		AddIcon /icons/back.gif ..
+		AddIcon /icons/hand.right.gif README
+		AddIcon /icons/folder.gif ^^DIRECTORY^^
+		AddIcon /icons/blank.gif ^^BLANKICON^^
+		DefaultIcon /icons/unknown.gif
+		ReadmeName README.html
+		HeaderName HEADER.html
+		IndexIgnore .??* *~ *# HEADER* README* RCS CVS *,v *,t
+</IfModule>
+#
+# Document types.
+#
+<IfModule mime_module>
+		TypesConfig /etc/default_config/apache/mime.types
+		AddLanguage da .dk
+		AddLanguage nl .nl
+		AddLanguage en .en
+		AddLanguage et .ee
+		AddLanguage fr .fr
+		AddLanguage de .de
+		AddLanguage el .el
+		AddLanguage he .he
+		AddCharset ISO-8859-8 .iso8859-8
+		AddLanguage it .it
+		AddLanguage ja .ja
+		AddCharset ISO-2022-JP .jis
+		AddLanguage kr .kr
+		AddCharset ISO-2022-KR .iso-kr
+		AddLanguage nn .nn
+		AddLanguage no .no
+		AddLanguage pl .po
+		AddCharset ISO-8859-2 .iso-pl
+		AddLanguage pt .pt
+		AddLanguage pt-br .pt-br
+		AddLanguage ltz .lu
+		AddLanguage ca .ca
+		AddLanguage es .es
+		AddLanguage sv .sv
+		AddLanguage cs .cz .cs
+		AddLanguage ru .ru
+		AddLanguage zh-TW .zh-tw
+		AddCharset Big5				 .Big5		.big5
+		AddCharset WINDOWS-1251 .cp-1251
+		AddCharset CP866				.cp866
+		AddCharset ISO-8859-5   .iso-ru
+		AddCharset KOI8-R		   .koi8-r
+		AddCharset UCS-2				.ucs2
+		AddCharset UCS-4				.ucs4
+		AddCharset UTF-8				.utf8
+		<IfModule negotiation_module>
+				LanguagePriority en da nl et fr de el it ja kr no pl pt pt-br ru ltz ca es sv tw
+		</IfModule>
+		AddType application/x-tar .tgz
+		AddEncoding x-compress .Z
+		AddEncoding x-gzip .gz .tgz
+		AddType application/x-compress .Z
+		AddType application/x-gzip .gz .tgz
+		AddType application/x-httpd-php .php .php4 .php3 .phtml
+		AddType application/x-httpd-php-source .phps
+		AddHandler cgi-script .cgi
+		AddType text/html .shtml
+		AddHandler server-parsed .shtml
+		AddHandler send-as-is asis
+		AddHandler imap-file map
+		AddHandler type-map var
+</IfModule>
+<IfModule mime_magic_module>
+		MIMEMagicFile /etc/default_config/apache/magic
+</IfModule>
+<IfModule setenvif_module>
+		BrowserMatch "Mozilla/2" nokeepalive
+		BrowserMatch "MSIE 4\.0b2;" nokeepalive downgrade-1.0 force-response-1.0
+		BrowserMatch "RealPlayer 4\.0" force-response-1.0
+		BrowserMatch "Java/1\.0" force-response-1.0
+		BrowserMatch "JDK/1\.0" force-response-1.0
+		BrowserMatch "QGet[23]" nokeepalive downgrade-1.0 force-response-1.0
+		BrowserMatch "Qfile 1\.[012]" nokeepalive downgrade-1.0 force-response-1.0
+		BrowserMatch "Qmanager 1\.[012]" nokeepalive downgrade-1.0 force-response-1.0
+		BrowserMatch "QTS_HTTP" nokeepalive downgrade-1.0 force-response-1.0
+		BrowserMatch "QNAPWebFileMan" nokeepalive downgrade-1.0 force-response-1.0
+		BrowserMatch "MyCloudNAS" nokeepalive downgrade-1.0 force-response-1.0
+</IfModule>
+<IfModule ssl_module>
+SSLRandomSeed startup builtin
+SSLRandomSeed connect builtin
+</IfModule>
+LoadModule deflate_module modules/mod_deflate.so
+<IfModule mod_deflate.c>
+DeflateCompressionLevel 2
+AddOutputFilterByType DEFLATE text/html text/css application/x-javascript
+AddOutputFilter DEFLATE js css
+BrowserMatch ^Mozilla/4 gzip-only-text/html
+BrowserMatch ^Mozilla/4\.[0678] no-gzip
+BrowserMatch \bMSIE\s7  !no-gzip !gzip-only-text/html
+</IfModule>
+#===SSL===
+LoadModule ssl_module modules/mod_ssl.so
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_ajp_module modules/mod_proxy_ajp.so
+LoadModule proxy_balancer_module modules/mod_proxy_balancer.so
+LoadModule proxy_connect_module modules/mod_proxy_connect.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
+LoadModule proxy_scgi_module modules/mod_proxy_scgi.so
+LoadModule php5_module modules/libphp5.so
+PHPINIDir /etc/default_config/php
+<IfModule alias_module>
+	Alias /v3_menu "/home/httpd/v3_menu"
+	<Directory "/home/httpd/v3_menu">
+		AllowOverride None
+		Order allow,deny
+		Allow from all
+	</Directory>
+	Alias /apps "/mnt/ext/opt/apps"
+	<Directory "/mnt/ext/opt/apps">
+		AllowOverride All
+		Order allow,deny
+		Allow from all
+	</Directory>
+	Alias /RSS/images "/home/httpd/RSS/images"
+	<Directory "/home/httpd/RSS/images">
+		AllowOverride None
+		Order allow,deny
+		Allow from all
+	</Directory>
+	Alias /cgi-bin/qpkg "/home/httpd/cgi-bin/qpkg"
+	<Directory "/home/httpd/cgi-bin/qpkg">
+		AllowOverride All
+		Order allow,deny
+		Allow from all
+		Options All -Indexes
+	</Directory>
+	ProxyPass /apps !
+	ProxyPass /v3_menu !
+	ProxyPass /RSS/images !
+	ProxyPass /cgi-bin/qpkg !
+</IfModule>
+Include /etc/default_config/apache-musicstation.conf
+Include /etc/default_config/apache-photo.conf
+Include /etc/default_config/apache-video.conf
+
+SSLRandomSeed startup file:/dev/urandom 512
+AddType application/x-x509-ca-cert .crt
+AddType application/x-pkcs7-crl    .crl
+SSLPassPhraseDialog  builtin
+SSLSessionCache        "shmcb:/usr/local/apache/logs/ssl_scache(512000)"
+SSLSessionCacheTimeout  300
+SSLMutex  "file:/usr/local/apache/logs/ssl_mutex"
+<Directory />
+	Options FollowSymLinks
+	AllowOverride None
+	Order deny,allow
+	Deny from all
+	SSLRequire %{SSL_CIPHER} !~ m/^(EXP|NULL)/
+</Directory>
+<VirtualHost _default_:@SYS_HTTPS_PORT@>
+ServerName localhost
+ServerAlias *.myqnapcloud.com
+SSLEngine on
+SSLProxyEngine on
+SSLHonorCipherOrder on
+SSLCipherSuite ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA
+SSLProtocol All -SSLv2 -SSLv3
+SSLCertificateFile "/etc/stunnel/stunnel.pem"
+#SSLCertificateChainFile "/etc/stunnel/uca.pem"
+ProxyRequests Off
+ProxyBadHeader Ignore
+ProxyPreserveHost On
+<directory proxy:*>
+Order deny,allow
+Deny from all
+Allow from all
+</directory>
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^([^:]+)(:[0-9]+)?$
+RewriteRule (^\/gq\/v1\/.*) /scale-out-manager$1 [PT,L]
+ProxyPass /scale-out-manager/ http://127.0.0.1:@GQ_PORT@/
+ProxyPassReverse /scale-out-manager/ http://127.0.0.1:@GQ_PORT@/
+ProxyPass /photostation !
+ProxyPass /photo !
+ProxyPass /musicstation !
+ProxyPass /videostation !
+ProxyPass /video !
+ProxyPass /sociallinkstation http://127.0.0.1:9290/
+Include /etc/app_proxy.conf
+ProxyPass / http://127.0.0.1:@SYS_HTTP_PORT@/ max=16
+</VirtualHost>                                  
