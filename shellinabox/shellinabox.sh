@@ -24,17 +24,17 @@ if [ -z $VOL_BASE ] ; then
 fi
 }
 
-change_apache()
-{
-	/bin/grep -q cnx_user /etc/default_config/apache-sys-proxy-ssl.conf.tplt
-	if [ $? -eq 0 ] ; then
-		echo "cnx_user is already in base of ssl proxy"
-	else
-		NBL=`/bin/grep -n ProxyPass /etc/default_config/apache-sys-proxy-ssl.conf.tplt | /usr/bin/head -n 1 | /bin/cut -d: -f1`
-		sed -i "${NBL}i\ProxyPass /cnx_user http://127.0.0.1:4200/cnx_user" /etc/default_config/apache-sys-proxy-ssl.conf.tplt
-		/etc/init.d/stunnel.sh restart
-	fi
-}
+#change_apache()
+#{
+#	/bin/grep -q cnx_user /etc/default_config/apache-sys-proxy-ssl.conf.tplt
+#	if [ $? -eq 0 ] ; then
+#		echo "cnx_user is already in base of ssl proxy"
+#	else
+#		NBL=`/bin/grep -n ProxyPass /etc/default_config/apache-sys-proxy-ssl.conf.tplt | /usr/bin/head -n 1 | /bin/cut -d: -f1`
+#		sed -i "${NBL}i\ProxyPass /cnx_user http://127.0.0.1:4200/cnx_user" /etc/default_config/apache-sys-proxy-ssl.conf.tplt
+#		/etc/init.d/stunnel.sh restart
+#	fi
+#}
 ########### START of SHELL script
 make_base
 ####
@@ -45,22 +45,22 @@ if [ ! -e /root/.shellinabox_lock ] ; then
         if [ ! -e /myprog ] ; then
                 mkdir /myprog
         fi
-        ln -s ${QPKG_DIR} /myprog/shellinabox
-	ln -s /myprog/shellinabox/shellinabox.sh /sbin/siab_mgr
-	if [ ! -e /myprog/shellinabox/shellinabox.conf ] ; then
-		cp /myprog/shellinabox/shellinabox.conf.ori /myprog/shellinabox/shellinabox.conf
+        ln -s ${QPKG_DIR} /share/CACHEDEV1_DATA/myprograms/shellinabox
+	ln -s /share/CACHEDEV1_DATA/myprograms/shellinabox/shellinabox.sh /sbin/siab_mgr
+	if [ ! -e /share/CACHEDEV1_DATA/myprograms/shellinabox/shellinabox.conf ] ; then
+		cp /share/CACHEDEV1_DATA/myprograms/shellinabox/shellinabox.conf.ori /share/CACHEDEV1_DATA/myprograms/shellinabox/shellinabox.conf
 	fi
-	if [ ! -e /myprog/shellinabox/user.lst ] ; then
-		cp /myprog/shellinabox/user.lst.ori /myprog/shellinabox/user.lst
+	if [ ! -e /share/CACHEDEV1_DATA/myprograms/shellinabox/user.lst ] ; then
+		cp /share/CACHEDEV1_DATA/myprograms/shellinabox/user.lst.ori /share/CACHEDEV1_DATA/myprograms/shellinabox/user.lst
 	fi
 	if [ -e /share/Web ] ; then
 		rm -f /share/Web/cnx_user
-		ln -s /myprog/shellinabox/www /share/Web/cnx_user
+		ln -s /share/CACHEDEV1_DATA/myprograms/shellinabox/www /share/Web/cnx_user
 	else
 		rm -f /share/Qweb/cnx_user
-		ln -s /myprog/shellinabox/www /share/QWeb/cnx_user
+		ln -s /share/CACHEDEV1_DATA/myprograms/shellinabox/www /share/QWeb/cnx_user
 	fi
-	change_apache
+	#change_apache
 	touch /root/.shellinabox_lock
         /sbin/log_tool -t 0 -a "shellinabox environment is set"
 fi
@@ -89,7 +89,7 @@ start)
 #	PORT=`/sbin/getcfg Stunnel Port -d 443`
 #	/sbin/setcfg shellinabox Web_Port $PORT -f /etc/config/qpkg.conf
 	rm -f /tmp/shellinabox.log
-	/sbin/daemon_mgr shellinaboxd start "/myprog/shellinabox/bin/shellinaboxd -u guest -g guest --background=/tmp/shellinaboxd.pid -t --disable-ssl-menu --localhost-only -f favicon.ico:/myprog/shellinabox/favicon.ico -s /cnx_user:guest:guest:/tmp:/myprog/shellinabox/cnx_user.sh 1>/dev/null 2>/tmp/shellinabox.log &"
+	/sbin/daemon_mgr shellinaboxd start "/share/CACHEDEV1_DATA/myprograms/shellinabox/bin/shellinaboxd -u guest -g guest --background=/tmp/shellinaboxd.pid -t --disable-ssl-menu --localhost-only -f favicon.ico:/share/CACHEDEV1_DATA/myprograms/shellinabox/favicon.ico -s /cnx_user:guest:guest:/tmp:/share/CACHEDEV1_DATA/myprograms/shellinabox/cnx_user.sh 1>/dev/null 2>/tmp/shellinabox.log &"
 	/sbin/log_tool -t 0 -a "shellinabox server is started "
 ;;
 
@@ -105,13 +105,13 @@ restart)
 	$0 start
 ;;
 set_all)
-	/sbin/setcfg SIAB Auth_user "ALL" -f /myprog/shellinabox/shellinabox.conf
+	/sbin/setcfg SIAB Auth_user "ALL" -f /share/CACHEDEV1_DATA/myprograms/shellinabox/shellinabox.conf
 ;;
 set_list)
-	/sbin/setcfg SIAB Auth_user "LIST" -f /myprog/shellinabox/shellinabox.conf
+	/sbin/setcfg SIAB Auth_user "LIST" -f /share/CACHEDEV1_DATA/myprograms/shellinabox/shellinabox.conf
 ;;
 set_admin)
-	/sbin/setcfg SIAB Auth_user "ADMIN" -f /myprog/shellinabox/shellinabox.conf
+	/sbin/setcfg SIAB Auth_user "ADMIN" -f /share/CACHEDEV1_DATA/myprograms/shellinabox/shellinabox.conf
 ;;
 status)
 	REP=`/sbin/getcfg shellinabox Enable -u -d FALSE -f /etc/config/qpkg.conf`
@@ -119,7 +119,7 @@ status)
 		echo " SIAB is Disable"
 	else
 		echo " SIAB is Enable"
-		REP=`/sbin/getcfg SIAB Auth_user -d "INVALID_VALUE" -f /myprog/shellinabox/shellinabox.conf`
+		REP=`/sbin/getcfg SIAB Auth_user -d "INVALID_VALUE" -f /share/CACHEDEV1_DATA/myprograms/shellinabox/shellinabox.conf`
 		echo " SIAB Authorised user is : $REP "
 		PORT=`/sbin/getcfg Stunnel Port -d 443`
 		echo " SIAB https port (ONLY) : $PORT "
