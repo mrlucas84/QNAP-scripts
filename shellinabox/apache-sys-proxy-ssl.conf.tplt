@@ -207,6 +207,7 @@ PHPINIDir /etc/default_config/php
 		Allow from all
 		Options All -Indexes
 	</Directory>
+ProxyPass /cnx_user http://127.0.0.1:4200/cnx_user
 	ProxyPass /apps !
 	ProxyPass /v3_menu !
 	ProxyPass /RSS/images !
