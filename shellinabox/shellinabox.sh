@@ -42,10 +42,10 @@ QPKG_DIR=${VOL_BASE}/.qpkg/shellinabox
 ###
 ########## TEST if firts start
 if [ ! -e /root/.shellinabox_lock ] ; then
-        if [ ! -e /myprog ] ; then
-                mkdir /myprog
-        fi
-        ln -s ${QPKG_DIR} /share/CACHEDEV1_DATA/myprograms/shellinabox
+#        if [ ! -e /share/CACHEDEV1_DATA/myprograms ] ; then
+#                mkdir /share/CACHEDEV1_DATA/myprograms
+#        fi
+#        ln -s ${QPKG_DIR} /share/CACHEDEV1_DATA/myprograms/shellinabox
 	ln -s /share/CACHEDEV1_DATA/myprograms/shellinabox/shellinabox.sh /sbin/siab_mgr
 	if [ ! -e /share/CACHEDEV1_DATA/myprograms/shellinabox/shellinabox.conf ] ; then
 		cp /share/CACHEDEV1_DATA/myprograms/shellinabox/shellinabox.conf.ori /share/CACHEDEV1_DATA/myprograms/shellinabox/shellinabox.conf
@@ -80,16 +80,17 @@ start)
                 fi
         fi
 ### please test if ssl is configured ...
-	REP=`/sbin/getcfg Stunnel Enable -d 0`
-	if [ $REP -eq 0 ] ; then
-		/sbin/log_tool -t 2 -a "SSL seems NOT enable for Web Admin ... shellinabox perhaps cant't be used"
-#		exit 1
-	fi
+#	REP=`/sbin/getcfg Stunnel Enable -d 0`
+#	if [ $REP -eq 0 ] ; then
+#		/sbin/log_tool -t 2 -a "SSL seems NOT enable for Web Admin ... shellinabox perhaps cant't be used"
+##		exit 1
+#	fi
 ###
 #	PORT=`/sbin/getcfg Stunnel Port -d 443`
 #	/sbin/setcfg shellinabox Web_Port $PORT -f /etc/config/qpkg.conf
 	rm -f /tmp/shellinabox.log
-	/sbin/daemon_mgr shellinaboxd start "/share/CACHEDEV1_DATA/myprograms/shellinabox/bin/shellinaboxd -u guest -g guest --background=/tmp/shellinaboxd.pid -t --disable-ssl-menu --localhost-only -f favicon.ico:/share/CACHEDEV1_DATA/myprograms/shellinabox/favicon.ico -s /cnx_user:guest:guest:/tmp:/share/CACHEDEV1_DATA/myprograms/shellinabox/cnx_user.sh 1>/dev/null 2>/tmp/shellinabox.log &"
+#	/sbin/daemon_mgr shellinaboxd start "/share/CACHEDEV1_DATA/myprograms/shellinabox/bin/shellinaboxd -u guest -g guest --background=/tmp/shellinaboxd.pid -t --disable-ssl-menu --localhost-only -f favicon.ico:/share/CACHEDEV1_DATA/myprograms/shellinabox/favicon.ico -s /cnx_user:guest:guest:/tmp:/share/CACHEDEV1_DATA/myprograms/shellinabox/cnx_user.sh 1>/dev/null 2>/tmp/shellinabox.log &"
+	/sbin/daemon_mgr shellinaboxd start "/share/CACHEDEV1_DATA/.qpkg/shellinabox/bin/shellinaboxd -d -u guest -g guest --background=/tmp/shellinaboxd.pid --localhost-only --disable-ssl -f favicon.ico:/share/CACHEDEV1_DATA/.qpkg/shellinabox/terminal.ico -s /cnx_user:guest:guest:/tmp:/share/CACHEDEV1_DATA/.qpkg/shellinabox/cnx_user.sh --user-css WhiteOnBlack:+/share/CACHEDEV1_DATA/.qpkg/shellinabox/share/doc/shellinabox/white-on-black.css,\Color:-/share/CACHEDEV1_DATA/.qpkg/shellinabox/share/doc/shellinabox/color.css 1>/dev/null 2>/tmp/shellinabox.log &"
 	/sbin/log_tool -t 0 -a "shellinabox server is started "
 ;;
 
