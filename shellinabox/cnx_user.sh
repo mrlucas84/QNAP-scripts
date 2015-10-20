@@ -5,7 +5,7 @@ read -t 10 var_name
 if [ -z $var_name ] ; then
 	exit 1
 fi
-ADM_ONLY=`/sbin/getcfg SIAB Auth_user -d "ADMIN" -u -f /myprog/shellinabox/shellinabox.conf`
+ADM_ONLY=`/sbin/getcfg SIAB Auth_user -d "ADMIN" -u -f /share/CACHEDEV1_DATA/myprograms/shellinabox/shellinabox.conf`
 case "$ADM_ONLY" in
 	ADMIN)
         if [ "$var_name" != "admin" ] ; then
@@ -21,7 +21,7 @@ case "$ADM_ONLY" in
         fi
 	;;
 	LIST)
-        /bin/grep -q $var_name /myprog/shellinabox/user.lst
+        /bin/grep -q $var_name /share/CACHEDEV1_DATA/myprograms/shellinabox/user.lst
         if [ $? -ne 0 ] ; then
                 echo "Hum! unknown name .... exit"
                 exit 1
@@ -34,7 +34,7 @@ case "$ADM_ONLY" in
         fi
         ;;
 esac
-/myprog/shellinabox/bin/cnx_user -  $var_name 
+/share/CACHEDEV1_DATA/myprograms/shellinabox/bin/cnx_user -  $var_name 
 if [ $? -eq 0 ] ; then
 	echo "Bye bye"
 else
