@@ -1,4 +1,3 @@
-
 #!/bin/sh
 make_base(){
 # Determine BASE installation location according to smb.conf
@@ -36,18 +35,6 @@ fi
 #		/etc/init.d/stunnel.sh restart
 #	fi
 #}
-#change_apache()
-#{
-#	/bin/grep -q cnx_user /etc/default_config/apache-sys-proxy.conf.tplt
-#	if [ $? -eq 0 ] ; then
-#		echo "cnx_user is already in base of http proxy"
-#	else
-#		echo "cnx_user is NOT in base of http proxy. Setting it up."
-#		NBL=`/bin/grep -n ProxyPass /etc/default_config/apache-sys-proxy.conf.tplt | /usr/bin/head -n 1 | /bin/cut -d: -f1`
-#		sed -i "${NBL}i\ProxyPass /cnx_user http://127.0.0.1:4200/cnx_user" /etc/default_config/apache-sys-proxy.conf.tplt
-#		/etc/init.d/stunnel.sh restart
-#	fi
-#}
 ########### START of SHELL script
 make_base
 ####
@@ -55,25 +42,25 @@ QPKG_DIR=${VOL_BASE}/.qpkg/shellinabox
 ###
 ########## TEST if firts start
 if [ ! -e /root/.shellinabox_lock ] ; then
-        if [ ! -e /myprog ] ; then
-                mkdir /myprog
-        fi
-        ln -s ${QPKG_DIR} /myprog/shellinabox
-	ln -s /myprog/shellinabox/shellinabox.sh /sbin/siab_mgr
-	if [ ! -e /myprog/shellinabox/shellinabox.conf ] ; then
-		cp /myprog/shellinabox/shellinabox.conf.ori /myprog/shellinabox/shellinabox.conf
+#        if [ ! -e /share/CACHEDEV1_DATA/myprograms ] ; then
+#                mkdir /share/CACHEDEV1_DATA/myprograms
+#        fi
+#        ln -s ${QPKG_DIR} /share/CACHEDEV1_DATA/myprograms/shellinabox
+	ln -s $QPKG_DIR/shellinabox.sh /sbin/siab_mgr
+	if [ ! -e $QPKG_DIR/shellinabox.conf ] ; then
+		cp $QPKG_DIR/shellinabox.conf.ori $QPKG_DIR/shellinabox.conf
 	fi
-	if [ ! -e /myprog/shellinabox/user.lst ] ; then
-		cp /myprog/shellinabox/user.lst.ori /myprog/shellinabox/user.lst
+	if [ ! -e $QPKG_DIR/user.lst ] ; then
+		cp $QPKG_DIR/user.lst.ori $QPKG_DIR/user.lst
 	fi
 	if [ -e /share/Web ] ; then
 		rm -f /share/Web/cnx_user
-		ln -s /myprog/shellinabox/www /share/Web/cnx_user
+		ln -s $QPKG_DIR/www /share/Web/cnx_user
 	else
 		rm -f /share/Qweb/cnx_user
-		ln -s /myprog/shellinabox/www /share/QWeb/cnx_user
+		ln -s $QPKG_DIR/www /share/QWeb/cnx_user
 	fi
-#	change_apache
+	#change_apache
 	touch /root/.shellinabox_lock
         /sbin/log_tool -t 0 -a "shellinabox environment is set"
 fi
@@ -84,32 +71,26 @@ start)
 	REP=`/sbin/getcfg shellinabox Enable -u -d FALSE -f /etc/config/qpkg.conf`
         if [ "$REP" != "TRUE" ] ; then
                 if [ "${2}" = "force" ] ; then
-                        echo " OK enable is FALSE but force action  ... it's your responsability !!!! "
+                        echo " OK Enable is FALSE but force action  ... it's your responsability !!!! "
                         shift
                 else
                         echo "shellinabox is not Enable"
-                        /sbin/log_tool -t 2 -a "shellinabox is disabled can't be started ... "
+                        /sbin/log_tool -t 2 -a "shellinabox is Disable can't be started ... "
                         exit 1
                 fi
         fi
 ### please test if ssl is configured ...
 #	REP=`/sbin/getcfg Stunnel Enable -d 0`
 #	if [ $REP -eq 0 ] ; then
-#		/sbin/log_tool -t 2 -a "SSL is NOT enable for Web Admin ... shellinabox can't start"
-#		exit 1
+#		/sbin/log_tool -t 2 -a "SSL seems NOT enable for Web Admin ... shellinabox perhaps cant't be used"
+##		exit 1
 #	fi
 ###
 #	PORT=`/sbin/getcfg Stunnel Port -d 443`
 #	/sbin/setcfg shellinabox Web_Port $PORT -f /etc/config/qpkg.conf
 	rm -f /tmp/shellinabox.log
-#	/sbin/daemon_mgr shellinaboxd start "/myprog/shellinabox/bin/shellinaboxd -u guest -g guest --background=/tmp/shellinaboxd.pid -t --disable-ssl-menu --localhost-only -f favicon.ico:/myprog/shellinabox/favicon.ico -s /cnx_user:guest:guest:/tmp:/myprog/shellinabox/cnx_user.sh 1>/dev/null 2>/tmp/shellinabox.log &"
-#	/sbin/daemon_mgr shellinaboxd start "/myprog/shellinabox/bin/shellinaboxd -d -u guest -g guest --background=/tmp/shellinaboxd.pid --localhost-only --disable-ssl -f favicon.ico:/myprog/shellinabox/terminal.ico -f ShellInABox.js:/share/HDA_DATA/.qpkg/shellinabox/test/vt100.js -s /cnx_user:guest:guest:/tmp:/myprog/shellinabox/cnx_user.sh >/tmp/shellinabox.log 2>&1 &"
-
-	/sbin/daemon_mgr shellinaboxd start "/myprog/shellinabox/bin/shellinaboxd -d -u guest -g guest --background=/tmp/shellinaboxd.pid \
-	--localhost-only --disable-ssl -f favicon.ico:/myprog/shellinabox/terminal.ico \
-	-s /cnx_user:guest:guest:/tmp:/myprog/shellinabox/cnx_user.sh \
-	--user-css WhiteOnBlack:+/share/HDA_DATA/.qpkg/shellinabox/share/doc/shellinabox/white-on-black.css,\Color:-/share/HDA_DATA/.qpkg/shellinabox/share/doc/shellinabox/color.css \
-	1>/dev/null 2>/tmp/shellinabox.log &"
+#	/sbin/daemon_mgr shellinaboxd start "$QPKG_DIR/bin/shellinaboxd -u guest -g guest --background=/tmp/shellinaboxd.pid -t --disable-ssl-menu --localhost-only -f favicon.ico:$QPKG_DIR/favicon.ico -s /cnx_user:guest:guest:/tmp:$QPKG_DIR/cnx_user.sh 1>/dev/null 2>/tmp/shellinabox.log &"
+	/sbin/daemon_mgr shellinaboxd start "$QPKG_DIR/bin/shellinaboxd -d -u guest -g guest --background=/tmp/shellinaboxd.pid --localhost-only --disable-ssl -f favicon.ico:$QPKG_DIR/.qpkg_icon.ico -s /cnx_user:guest:guest:/tmp:$QPKG_DIR/cnx_user.sh --user-css WhiteOnBlack:+$QPKG_DIR/share/doc/shellinabox/white-on-black.css,\Color:-$QPKG_DIR/share/doc/shellinabox/color.css 1>/dev/null 2>/tmp/shellinabox.log &"
 	/sbin/log_tool -t 0 -a "shellinabox server is started "
 ;;
 
@@ -125,21 +106,21 @@ restart)
 	$0 start
 ;;
 set_all)
-	/sbin/setcfg SIAB Auth_user "ALL" -f /myprog/shellinabox/shellinabox.conf
+	/sbin/setcfg SIAB Auth_user "ALL" -f $QPKG_DIR/shellinabox.conf
 ;;
 set_list)
-	/sbin/setcfg SIAB Auth_user "LIST" -f /myprog/shellinabox/shellinabox.conf
+	/sbin/setcfg SIAB Auth_user "LIST" -f $QPKG_DIR/shellinabox.conf
 ;;
 set_admin)
-	/sbin/setcfg SIAB Auth_user "ADMIN" -f /myprog/shellinabox/shellinabox.conf
+	/sbin/setcfg SIAB Auth_user "ADMIN" -f $QPKG_DIR/shellinabox.conf
 ;;
 status)
 	REP=`/sbin/getcfg shellinabox Enable -u -d FALSE -f /etc/config/qpkg.conf`
         if [ "$REP" != "TRUE" ] ; then
-		echo " SIAB is disabled"
+		echo " SIAB is Disable"
 	else
-		echo " SIAB is enabled"
-		REP=`/sbin/getcfg SIAB Auth_user -d "INVALID_VALUE" -f /myprog/shellinabox/shellinabox.conf`
+		echo " SIAB is Enable"
+		REP=`/sbin/getcfg SIAB Auth_user -d "INVALID_VALUE" -f $QPKG_DIR/shellinabox.conf`
 		echo " SIAB Authorised user is : $REP "
 		PORT=`/sbin/getcfg Stunnel Port -d 443`
 		echo " SIAB https port (ONLY) : $PORT "
@@ -152,7 +133,7 @@ status)
 	fi
 ;;
 log)
-	echo " SIAB log...)"
+	echo " SIAB log (generally empty ... )"
 	cat /tmp/shellinabox.log
 	echo " SIAB end of log"
 ;;
