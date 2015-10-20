@@ -46,19 +46,19 @@ if [ ! -e /root/.shellinabox_lock ] ; then
 #                mkdir /share/CACHEDEV1_DATA/myprograms
 #        fi
 #        ln -s ${QPKG_DIR} /share/CACHEDEV1_DATA/myprograms/shellinabox
-	ln -s QPKG_DIR/shellinabox.sh /sbin/siab_mgr
-	if [ ! -e QPKG_DIR/shellinabox.conf ] ; then
-		cp QPKG_DIR/shellinabox.conf.ori QPKG_DIR/shellinabox.conf
+	ln -s $QPKG_DIR/shellinabox.sh /sbin/siab_mgr
+	if [ ! -e $QPKG_DIR/shellinabox.conf ] ; then
+		cp $QPKG_DIR/shellinabox.conf.ori $QPKG_DIR/shellinabox.conf
 	fi
-	if [ ! -e QPKG_DIR/user.lst ] ; then
-		cp QPKG_DIR/user.lst.ori QPKG_DIR/user.lst
+	if [ ! -e $QPKG_DIR/user.lst ] ; then
+		cp $QPKG_DIR/user.lst.ori $QPKG_DIR/user.lst
 	fi
 	if [ -e /share/Web ] ; then
 		rm -f /share/Web/cnx_user
-		ln -s QPKG_DIR/www /share/Web/cnx_user
+		ln -s $QPKG_DIR/www /share/Web/cnx_user
 	else
 		rm -f /share/Qweb/cnx_user
-		ln -s QPKG_DIR/www /share/QWeb/cnx_user
+		ln -s $QPKG_DIR/www /share/QWeb/cnx_user
 	fi
 	#change_apache
 	touch /root/.shellinabox_lock
@@ -89,8 +89,8 @@ start)
 #	PORT=`/sbin/getcfg Stunnel Port -d 443`
 #	/sbin/setcfg shellinabox Web_Port $PORT -f /etc/config/qpkg.conf
 	rm -f /tmp/shellinabox.log
-#	/sbin/daemon_mgr shellinaboxd start "QPKG_DIR/bin/shellinaboxd -u guest -g guest --background=/tmp/shellinaboxd.pid -t --disable-ssl-menu --localhost-only -f favicon.ico:QPKG_DIR/favicon.ico -s /cnx_user:guest:guest:/tmp:QPKG_DIR/cnx_user.sh 1>/dev/null 2>/tmp/shellinabox.log &"
-	/sbin/daemon_mgr shellinaboxd start "QPKG_DIR/bin/shellinaboxd -d -u guest -g guest --background=/tmp/shellinaboxd.pid --localhost-only --disable-ssl -f favicon.ico:QPKG_DIR/.qpkg_icon.ico -s /cnx_user:guest:guest:/tmp:QPKG_DIR/cnx_user.sh --user-css WhiteOnBlack:+QPKG_DIR/share/doc/shellinabox/white-on-black.css,\Color:-QPKG_DIR/share/doc/shellinabox/color.css 1>/dev/null 2>/tmp/shellinabox.log &"
+#	/sbin/daemon_mgr shellinaboxd start "$QPKG_DIR/bin/shellinaboxd -u guest -g guest --background=/tmp/shellinaboxd.pid -t --disable-ssl-menu --localhost-only -f favicon.ico:$QPKG_DIR/favicon.ico -s /cnx_user:guest:guest:/tmp:$QPKG_DIR/cnx_user.sh 1>/dev/null 2>/tmp/shellinabox.log &"
+	/sbin/daemon_mgr shellinaboxd start "$QPKG_DIR/bin/shellinaboxd -d -u guest -g guest --background=/tmp/shellinaboxd.pid --localhost-only --disable-ssl -f favicon.ico:$QPKG_DIR/.qpkg_icon.ico -s /cnx_user:guest:guest:/tmp:$QPKG_DIR/cnx_user.sh --user-css WhiteOnBlack:+$QPKG_DIR/share/doc/shellinabox/white-on-black.css,\Color:-$QPKG_DIR/share/doc/shellinabox/color.css 1>/dev/null 2>/tmp/shellinabox.log &"
 	/sbin/log_tool -t 0 -a "shellinabox server is started "
 ;;
 
@@ -106,13 +106,13 @@ restart)
 	$0 start
 ;;
 set_all)
-	/sbin/setcfg SIAB Auth_user "ALL" -f QPKG_DIR/shellinabox.conf
+	/sbin/setcfg SIAB Auth_user "ALL" -f $QPKG_DIR/shellinabox.conf
 ;;
 set_list)
-	/sbin/setcfg SIAB Auth_user "LIST" -f QPKG_DIR/shellinabox.conf
+	/sbin/setcfg SIAB Auth_user "LIST" -f $QPKG_DIR/shellinabox.conf
 ;;
 set_admin)
-	/sbin/setcfg SIAB Auth_user "ADMIN" -f QPKG_DIR/shellinabox.conf
+	/sbin/setcfg SIAB Auth_user "ADMIN" -f $QPKG_DIR/shellinabox.conf
 ;;
 status)
 	REP=`/sbin/getcfg shellinabox Enable -u -d FALSE -f /etc/config/qpkg.conf`
@@ -120,7 +120,7 @@ status)
 		echo " SIAB is Disable"
 	else
 		echo " SIAB is Enable"
-		REP=`/sbin/getcfg SIAB Auth_user -d "INVALID_VALUE" -f QPKG_DIR/shellinabox.conf`
+		REP=`/sbin/getcfg SIAB Auth_user -d "INVALID_VALUE" -f $QPKG_DIR/shellinabox.conf`
 		echo " SIAB Authorised user is : $REP "
 		PORT=`/sbin/getcfg Stunnel Port -d 443`
 		echo " SIAB https port (ONLY) : $PORT "
