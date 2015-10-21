@@ -1,16 +1,16 @@
 # vlmcsd xinetd config
-# /share/HDA_DATA/.qpkg/Optware/etc/xinetd.d/vlmcsd
+# /share/CACHEDEV1_DATA/.qpkg/Entware/etc/xinetd.d/vlmcsd
 service kms
 {
-        socket_type = stream
-#       type = UNLISTED		# Allow a TCP port that is not listed in /etc/services
-        port = 1688
-        protocol = tcp
-        wait = no
-        user = admin
-		group = administrators
-        server = /share/HDA_DATA/kms-vlmcsd/vlmcsd
-        server_args = -l /share/HDA_DATA/kms-vlmcsd/vlmcsd.log -I -i /share/HDA_DATA/kms-vlmcsd/vlmcsd.ini -p /share/HDA_DATA/kms-vlmcsd/vlmcsd.pid
-        flags = IPv4
-        disable = no
+	socket_type = stream
+ 	type = UNLISTED		# Allow a TCP port that is not listed in /etc/services
+	port = 1688
+	protocol = tcp
+	wait = no
+	user = admin
+	group = administrators
+	server = /share/CACHEDEV1_DATA/myprograms/vlmcsd/vlmcsd
+	server_args = -l /share/CACHEDEV1_DATA/myprograms/vlmcsd/vlmcsd.log -I -i /share/CACHEDEV1_DATA/myprograms/vlmcsd/vlmcsd.ini -p /share/CACHEDEV1_DATA/myprograms/vlmcsd/vlmcsd.pid
+	flags = IPv4
+	disable = no
 }

@@ -39,7 +39,9 @@ case "$1" in
 			if [ -f $PIDFILE ]; then
 				PID=`cat $PIDFILE`
 				kill $PID
-				rm $PIDFILE
+				if [ -f $PIDFILE ]; then
+					rm $PIDFILE
+				fi
 				echo "KMS Has been stopped"
 				exit 0
 			else
