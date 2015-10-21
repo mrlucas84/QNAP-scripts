@@ -1,10 +1,10 @@
 #!/bin/sh
-#/share/HDA_DATA/kms-vlmcsd/vlmcsd.sh
+#/share/CACHEDEV1_DATA/myprograms/vlmcsd/vlmcsd.sh
 
-EXECUTABLE="/share/HDA_DATA/kms-vlmcsd/vlmcsd"
-INIFILE="/share/HDA_DATA/kms-vlmcsd/vlmcsd.ini"
-PIDFILE="/share/HDA_DATA/kms-vlmcsd/vlmcsd.pid"
-LOGFILE="/share/HDA_DATA/kms-vlmcsd/vlmcsd.log"
+EXECUTABLE="/share/CACHEDEV1_DATA/myprograms/vlmcsd/vlmcsd"
+INIFILE="/share/CACHEDEV1_DATA/myprograms/vlmcsd/vlmcsd.ini"
+PIDFILE="/share/CACHEDEV1_DATA/myprograms/vlmcsd/vlmcsd.pid"
+LOGFILE="/share/CACHEDEV1_DATA/myprograms/vlmcsd/vlmcsd.log"
 USEIPv4="-4"
 USEIPv6=
 LISTENPORT="1688"
@@ -17,7 +17,7 @@ fi
 case "$1" in
 		start)
 			#Start daemon
-			if [ ! -f $PIDFILE ]; then                       
+			if [ ! -f $PIDFILE ]; then
 				$EXECUTABLE -i $INIFILE -p $PIDFILE $USEIPv4 $USEIPv6 -P $LISTENPORT -l $LOGFILE &
 				echo "KMS Has been started"
 				exit 0
