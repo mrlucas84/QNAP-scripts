@@ -3,7 +3,7 @@
 
 ENABLED=yes
 PROCS=transmission-daemon
-ARGS="--config-dir  /opt/etc/transmission/ --logfile /opt/var/log/transmission-daemon.log"
+ARGS="--config-dir  /opt/etc/transmission/ --logfile /share/CACHEDEV1_DATA/myprograms/transmission/transmission-daemon.log"
 PREARGS=""
 DESC=$PROCS
 PATH=/opt/sbin:/opt/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
