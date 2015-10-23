@@ -47,10 +47,10 @@ skipzlist="7z/7Z/tbz/tgz/z/zip/ZIP/rar/RAR/bz2/rpm/deb/gz/iso/ISO/jpeg/JPEG/jpg/
 if [ -n "${is_dryrun}" ]; then
 	dryrun="--dry-run"
 fi
-dirlist=( "-vrt :/share/CACHEDEV1_DATA/myprograms/Public/FOTOS"
-		  "-vrtz:/share/CACHEDEV1_DATA/myprograms/Public/Documentos"
-		  "-vrt :/share/CACHEDEV1_DATA/myprograms/Public/PDF"
-		  "-vrt :/share/CACHEDEV1_DATA/myprograms/Public/MUSICA" )
+dirlist=( "-vrt :/share/CACHEDEV1_DATA/Public/FOTOS"
+		  "-vrtz:/share/CACHEDEV1_DATA/Public/Documentos"
+		  "-vrt :/share/CACHEDEV1_DATA/Public/PDF"
+		  "-vrt :/share/CACHEDEV1_DATA/Public/MUSICA" )
 
 #######START STUFF
 /bin/echo "Checking if remote rsync server is already up."
