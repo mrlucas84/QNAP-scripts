@@ -16,6 +16,14 @@ apache_custom_conf=/share/CACHEDEV1_DATA/myprograms/apache/apache-custom.conf
 exec >> $log 2>&1
 
 log "PATH=$PATH"
+#check if link /dev/fd exists, if not, create it
+#necessary for process substitution to work, see http://wiki.bash-hackers.org/syntax/expansion/proc_subst
+dev_fd=/dev/fd
+if [ ! -e "$dev_fd" ]; then
+	/bin/echo "$dev_fd does NOT exist. Creating link to /proc/self/fd to enable process substitution"
+	/bin/ln -s /proc/self/fd "$dev_fd"
+fi
+
 log "Setting up custom scripts"
 
 #sobreescribir config SSH con la propia 
