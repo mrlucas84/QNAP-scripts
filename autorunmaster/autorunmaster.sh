@@ -18,6 +18,7 @@ exec >> $log 2>&1
 log "PATH=$PATH"
 #check if link /dev/fd exists, if not, create it
 #necessary for process substitution to work, see http://wiki.bash-hackers.org/syntax/expansion/proc_subst
+# and see http://www.ducea.com/2009/02/18/linux-tips-bash-completion-devfd62-no-such-file-or-directory/
 dev_fd=/dev/fd
 if [ ! -e "$dev_fd" ]; then
 	/bin/echo "$dev_fd does NOT exist. Creating link to /proc/self/fd to enable process substitution"

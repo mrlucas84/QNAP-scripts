@@ -26,6 +26,11 @@ function send_mail() {
 }
 mainlog=/share/CACHEDEV1_DATA/myprograms/backupjob/backupjob.log
 rsynclog=/share/CACHEDEV1_DATA/myprograms/backupjob/backupjob-rsync.log
+#check if link /dev/fd exists
+if [ ! -e /dev/fd ]
+then
+	echo "$[(date '+%F %T')] /dev/fd does NOT exist." >> $mainlog
+fi
 timestamp_log() { while IFS='' read -r line; do /bin/echo "[$(date '+%F %T')] $line" >> "$1"; done; };
 
 #redirect sterr to stdout and then stdout to function
