@@ -55,7 +55,8 @@ fi
 dirlist=( "-vrt :/share/CACHEDEV1_DATA/Public/FOTOS"
 		  "-vrtz:/share/CACHEDEV1_DATA/Public/Documentos"
 		  "-vrt :/share/CACHEDEV1_DATA/Public/PDF"
-		  "-vrt :/share/CACHEDEV1_DATA/Public/MUSICA" )
+		  "-vrt :/share/CACHEDEV1_DATA/Public/MUSICA" 
+		  "-vrt :/share/CACHEDEV1_DATA/Public/firmware/QNAP/@backup_config" )
 
 #######START STUFF
 /bin/echo "Checking if remote rsync server is already up."

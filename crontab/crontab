@@ -11,8 +11,8 @@
 10 15 * * * /usr/bin/power_clean -c 2>/dev/null
 39 * * * * /sbin/qddns_check 2>/dev/null
 0 16 * * * /etc/init.d/antivirus.sh scan 1
-4 3 * * 3 /etc/init.d/backup_conf.sh
+30 8 * * mon,wed,fri /share/CACHEDEV1_DATA/myprograms/backupjob/backupjob.sh
+00 15 * * * /share/CACHEDEV1_DATA/myprograms/logrotate/logrotate.sh
 30 7 * * * /usr/local/sbin/version_cleaner -t 0 > /dev/null 2>/dev/null
-45 16 * * * /usr/bin/qcloud_cli -c
-30 10 * * mon,wed,fri /share/CACHEDEV1_DATA/myprograms/backupjob/backupjob.sh
-0 12 * * * /share/CACHEDEV1_DATA/myprograms/logrotate/logrotate.sh
+52 7 * * * /usr/bin/qcloud_cli -c
+4 3 * * 3 /etc/init.d/backup_conf.sh
