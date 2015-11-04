@@ -1,54 +1,33 @@
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/qdownloadindex.cgi",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/res/css/ext-all.css?4.1.4.20150910",
-          "url": "http://192.168.1.163:8080/libs/extjs-3.3.3/resources/css/qnap-default.css?4.1.4.20150910",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/res/css/ds2.css?4.1.4.20150910",
-          "url": "http://192.168.1.163:8080/v3_menu/js/QMessageClient.js?4.1.4.20150910",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/libs/ext-base.js?4.1.4.20150910",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/libs/ext-all.js?4.1.4.20150910",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/libs/Notification.js?4.1.4.20150910",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/libs/RowEditor.js?4.1.4.20150910",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/libs/rpc.js?4.1.4.20150910",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/libs/ds_ext_override.js?4.1.4.20150910",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/libs/ds_common.js?4.1.4.20150910",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/libs/ds-setup.js?4.1.4.20150910",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/libs/ds-account.js?4.1.4.20150910",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/libs/ds-toolbar.js?4.1.4.20150910",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/libs/ds-bt-files.js?4.1.4.20150910",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/libs/ds-viewer.js?4.1.4.20150910",
-          "url": "http://192.168.1.163:8080/cgi-bin/images/window/title_bg.png",
-          "url": "http://192.168.1.163:8080/libs/extjs-3.3.3/resources/images/qnap-default/window/left-corners.png",
-          "url": "http://192.168.1.163:8080/libs/extjs-3.3.3/resources/images/qnap-default/window/right-corners.png",
-          "url": "http://192.168.1.163:8080/cgi-bin/images/window/toolbar/window_tools.png",
-          "url": "http://192.168.1.163:8080/cgi-bin/images/cmp/capsule_button.png",
-          "url": "http://192.168.1.163:8080/libs/extjs-3.3.3/resources/images/qnap-default/qtip/bg.gif",
-          "url": "http://192.168.1.163:8080/libs/extjs-3.3.3/resources/images/qnap-default/progress/progress-bg.gif",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/lang/ENG.js?4.1.4.20150910&1444385462910",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/libs/ds.js?4.1.4.20150910",
-          "url": "http://192.168.1.163:8080/libs/extjs-3.3.3/resources/images/qnap-default/qtip/tip-sprite.gif",
-          "url": "http://192.168.1.163:8080/libs/extjs-3.3.3/resources/images/qnap-default/qtip/tip-anchor-sprite.gif",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/dsReq.cgi",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/dsSearch.cgi",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/dsReq.cgi",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/dsReq.cgi",
-          "url": "http://192.168.1.163:8080/v3_menu/panel/default_portrait.png",
-          "url": "http://192.168.1.163:8080/v3_menu/panel/dropdownbutton_white.png",
-          "url": "http://192.168.1.163:8080/v3_menu/panel/headerbar_language.png",
-          "url": "http://192.168.1.163:8080/libs/extjs-3.3.3/resources/images/default/grid/row-check-sprite.gif",
-          "url": "http://192.168.1.163:8080/libs/extjs-3.3.3/resources/images/qnap-default/menu/menu-parent.gif",
-          "url": "http://192.168.1.163:8080/libs/extjs-3.3.3/resources/images/default/grid/page-first-disabled.gif",
-          "url": "http://192.168.1.163:8080/libs/extjs-3.3.3/resources/images/default/grid/page-prev-disabled.gif",
-          "url": "http://192.168.1.163:8080/libs/extjs-3.3.3/resources/images/default/form/text-bg.gif",
-          "url": "http://192.168.1.163:8080/libs/extjs-3.3.3/resources/images/qnap-default/form/trigger.gif",
-          "url": "http://192.168.1.163:8080/libs/extjs-3.3.3/resources/images/default/grid/page-next-disabled.gif",
-          "url": "http://192.168.1.163:8080/libs/extjs-3.3.3/resources/images/default/grid/page-last-disabled.gif",
-          "url": "http://192.168.1.163:8080/v3_menu/panel/toolbar_icon.png",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/dsReq.cgi",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/dsReq.cgi",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/dsReq.cgi",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/dsReq.cgi",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/dsReq.cgi",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/dsReq.cgi",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/dsReq.cgi",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/dsReq.cgi",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/dsReq.cgi",
-          "url": "http://192.168.1.163:8080/cgi-bin/Qdownload/dsReq.cgi",
+http://diogenes2:8080/cgi-bin/apps/FileUploadMgr/css/FileUploadMgr.css?_dc=4.2.0.20151023
+http://diogenes2:8080/cgi-bin/css/animation.css?_dc=4.2.0.20151023
+http://diogenes2:8080/cgi-bin/css/fm.css?_dc=4.2.0.20151023
+http://diogenes2:8080/cgi-bin/css/qts-menu.css?_dc=4.2.0.20151023
+http://diogenes2:8080/cgi-bin/css/qts-scrollbar.css?_dc=4.2.0.20151023
+http://diogenes2:8080/cgi-bin/css/shortcut-area-v3.css?_dc=4.2.0.20151023
+http://diogenes2:8080/cgi-bin/filemanager/utilRequest.cgi
+http://diogenes2:8080/cgi-bin/fm.html
+http://diogenes2:8080/cgi-bin/images/bg/shadow-2-25px.png?4.2.0.20151023
+http://diogenes2:8080/cgi-bin/images/bg/shadow-25px.png?4.2.0.20151023
+http://diogenes2:8080/cgi-bin/images/bg/shadow-3-25px.png?4.2.0.20151023
+http://diogenes2:8080/cgi-bin/images/toolbar/bt_close.png?4.2.0.20151023
+http://diogenes2:8080/cgi-bin/images/toolbar/icon-question.png?4.2.0.20151023
+http://diogenes2:8080/cgi-bin/images/toolbar/large_topbar_left.png?4.2.0.20151023
+http://diogenes2:8080/cgi-bin/images/toolbar/large_topbar_middle.png?4.2.0.20151023
+http://diogenes2:8080/cgi-bin/images/toolbar/large_topbar_right.png?4.2.0.20151023
+http://diogenes2:8080/cgi-bin/jc.cgi?_dc=4.2.0.20151023&t=css&f=qos.css&f=headerImages.css&f=header.css
+http://diogenes2:8080/cgi-bin/jc.cgi?_dc=4.2.0.20151023&t=js&f=ext-base.js&f=ext-all.js&f=languages.js&f=AC_OETags.js&f=deployJava.js&f=qnap-lib.js&f=qos-lib.js&f=qos-start.js&f=qos-core-env.js&f=qos-core-base.js&f=qos-core-window.js&f=fn-search.js&f=plugin-file-explorer.js&f=FileAPI.js
+http://diogenes2:8080/cgi-bin/keyword/keyword_ENG.js?4.2.0.20151023
+http://diogenes2:8080/cgi-bin/keyword/keyword_base.js?4.2.0.20151023
+http://diogenes2:8080/cgi-bin/langs/lang_ENG.js?4.2.0.20151023
+http://diogenes2:8080/cgi-bin/language.cgi?4.2.0.20151023
+http://diogenes2:8080/cgi-bin/user-settings.json?4.2.0.20151023
+http://diogenes2:8080/libs/extjs-3.3.3/resources/css/ext-all-notheme.css
+http://diogenes2:8080/libs/extjs-3.3.3/resources/css/qnap-default.css?_dc=4.2.0.20151023
+http://diogenes2:8080/libs/extjs-3.3.3/resources/images/default/progress/progress-bg.gif
+http://diogenes2:8080/libs/extjs-3.3.3/resources/images/default/qtip/bg.gif
+http://diogenes2:8080/libs/extjs-3.3.3/resources/images/qnap-default/button/btn.gif
+http://diogenes2:8080/libs/extjs-3.3.3/resources/images/qnap-default/window/left-corners.png
+http://diogenes2:8080/libs/extjs-3.3.3/resources/images/qnap-default/window/right-corners.png
+http://diogenes2:8080/libs/extjs-plugin/compressed.js
+http://diogenes2:8080/libs/post_message/QMessage.js?4.2.0.20151023
+http://diogenes2:8080/v3_menu/panel/toolbar_icon.png?4.2.0.20151023
