@@ -7,7 +7,7 @@
 
 log=/share/CACHEDEV1_DATA/myprograms/autorun/autorunmaster.log
 log(){
-	/bin/echo "$(/bin/date '+%F %T.%3N') $1" >> $log
+	/bin/echo "[$(/bin/date '+%F %T.%3N')] $1" >> $log
 }
 log "***** Starting autorunmaster.sh *****"
 apache_conf=/etc/config/apache/apache.conf
