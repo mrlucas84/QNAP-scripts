@@ -67,7 +67,7 @@ fi
 if [ -z "${alreadyup}" ]; then
 	/bin/echo "Host is DOWN. Waking up and waiting 70s..."
 	#$rsyncd_hostname - $rsyncd_ip - $rsyncd_mac
-	/opt/bin/etherwake -p $rsyncd_mac
+	/opt/bin/etherwake $rsyncd_mac
 	sleep 70
 else
 	/bin/echo "Host IS ALREADY UP! Skipping wake on lan."
