@@ -118,8 +118,8 @@ for ((i=1; i<=15; i++)); do
 			sleep 60
 			#try 15 times
 			for ((i=1; i<=15; i++)); do                          
-				/bin/echo "Pinging to check if rsync server is down (try #$i)..."
-				exec 2>&1> >(timestamp_log $rsynclog)
+				/bin/echo "Pinging to check if rsync server is down (try #$i)..."				
+				exec 2>&1> /dev/null
 				/bin/ping -q -c 1 $rsyncd_hostname                            # Try pinging 1 times
 				return_code=$?
 				exec 2>&1> >(timestamp_log $mainlog)
