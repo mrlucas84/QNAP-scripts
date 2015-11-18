@@ -1,7 +1,7 @@
 #!/bin/sh
 
 RETVAL=0
-QPKG_NAME="Entware"
+QPKG_NAME="Entware-ng"
 
 _exit()
 {
@@ -10,7 +10,7 @@ _exit()
     exit 1
 }
 
-QPKG_DIR=$(/sbin/getcfg Entware Install_Path -f /etc/config/qpkg.conf)
+QPKG_DIR=$(/sbin/getcfg Entware-ng Install_Path -f /etc/config/qpkg.conf)
 
 case "$1" in
   start)
@@ -20,21 +20,22 @@ case "$1" in
   	_exit  "${QPKG_NAME} is disabled."
   fi
 
-  /bin/echo "Enable Entware/opkg"
+  /bin/echo "Enable Entware-ng/opkg"
 	# sym-link $QPKG_DIR to /opt
 	/bin/rm -rf /opt
 	/bin/ln -sf $QPKG_DIR /opt
 	# adding opkg apps into system path ...
-	#Dani 07/10/2015
-	#Put OPKG first, per http://forum.qnap.com/viewtopic.php?f=351&t=103538&start=90#p506731 
-	/bin/cat /root/.profile | /bin/grep ". " | /bin/grep "/opt/etc/profile" 1>>/dev/null 2>>/dev/null
-	[ $? -ne 0 ] && /bin/echo ". /opt/etc/profile" >> /root/.profile
+
+
+	/bin/cat /root/.profile | /bin/grep "source" 1>>/dev/null 2>>/dev/null
+	[ $? -ne 0 ] && /bin/echo "source /opt/etc/profile" >> /root/.profile
+	# startup Entware-ng services
 	/opt/etc/init.d/rc.unslung start
     ;;
   stop)
-  	/bin/echo "Disable Entware/opkg"
+  	/bin/echo "Disable Entware-ng/opkg"
 	/opt/etc/init.d/rc.unslung stop
-	/bin/sed -i '/\. \/opt\/etc\/profile/d' /root/.profile
+	/bin/sed -i '/source \/opt\/etc\/profile/d' /root/.profile
 	/bin/sync
 	/bin/sleep 1
 	;;
