@@ -1,6 +1,11 @@
 #!/opt/bin/bash
 # script called by cron
+mainlog=/share/CACHEDEV1_DATA/myprograms/backupjob/backupjob.log
+exec &> $mainlog
+echo "[$(/bin/date '+%F %T.%3N')] *********** backupjob.sh START ***********************"
+rsynclog=/share/CACHEDEV1_DATA/myprograms/backupjob/backupjob-rsync.log
 source /share/CACHEDEV1_DATA/myprograms/backupjob/backupjob.cfg
+
 # Send a mail message
 function send_mail() {
 	# Takes one optional parameter to indicate error level as subject prefix ($1)
@@ -24,8 +29,7 @@ function send_mail() {
 	/usr/sbin/sendmail -t < "$tmpfile"
 	rm $tmpfile
 }
-mainlog=/share/CACHEDEV1_DATA/myprograms/backupjob/backupjob.log
-rsynclog=/share/CACHEDEV1_DATA/myprograms/backupjob/backupjob-rsync.log
+
 timestamp_log() { 
 	while IFS='' read -r line
 		do /bin/echo "[$(/bin/date '+%F %T.%3N')] $line" >> "$1"
@@ -39,7 +43,6 @@ fi
 
 #redirect sterr to stdout and then stdout to function
 exec 2>&1> >(timestamp_log $mainlog)
-/bin/echo "Starting backupjob.sh"
 #/bin/echo "PATH: $PATH"
 /bin/echo "Config:"
 /bin/echo "----------------------------------"
