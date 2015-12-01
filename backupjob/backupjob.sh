@@ -2,7 +2,7 @@
 # script called by cron
 mainlog=/share/CACHEDEV1_DATA/myprograms/backupjob/backupjob.log
 exec &> $mainlog
-echo "[$(/bin/date '+%F %T.%3N')] *********** backupjob.sh START ***********************"
+echo "[$(/bin/date '+%F %T.%3N')] backupjob.sh STARTED ***********************"
 rsynclog=/share/CACHEDEV1_DATA/myprograms/backupjob/backupjob-rsync.log
 source /share/CACHEDEV1_DATA/myprograms/backupjob/backupjob.cfg
 
@@ -43,7 +43,7 @@ fi
 
 #redirect sterr to stdout and then stdout to function
 exec 2>&1> >(timestamp_log $mainlog)
-#/bin/echo "PATH: $PATH"
+/bin/echo "PATH: $PATH"
 /bin/echo "Config:"
 /bin/echo "----------------------------------"
 /bin/echo "rsyncd_hostname=$rsyncd_hostname"
@@ -133,7 +133,7 @@ for ((i=1; i<=15; i++)); do
 				if [[ $return_code -ne 0 ]] ; then                # return code 1 is reply--> NOK, else OK
 					/bin/echo "No ping reply. Remote shutdown seems completed."
 					send_mail $error_level
-					/bin/echo "Exit."
+					/bin/echo "backupjob.sh EXIT SUCCESFUL ***********************"
 					exit 0                        # If okay, flag to exit loop.            
 				else
 					/bin/echo "Got ping replay. Wait 15s before trying again..."
@@ -144,12 +144,12 @@ for ((i=1; i<=15; i++)); do
 			/bin/echo "Trying force shutdown before giving up"
 			/usr/bin/ssh rsync@$rsyncd_hostname 'c:\Windows\System32\shutdown /p /f'
 			send_mail ERROR
-			/bin/echo "Exit."
+			/bin/echo "backupjob.sh EXIT ERROR ***********************"
 			exit 2
 		else
 			/bin/echo "Skipping shutdown since host was already up."
 			send_mail $error_level
-			/bin/echo "Exit."
+			/bin/echo "backupjob.sh EXIT SUCCESFUL ***********************"
 			exit 0
 		fi
 	else
@@ -159,5 +159,5 @@ for ((i=1; i<=15; i++)); do
 done
 /bin/echo "Failed connecting to rsync server after $((--i)) attempts. Giving up."
 send_mail FATAL
-/bin/echo "Exit."
+/bin/echo "backupjob.sh EXIT FATAL ***********************"
 exit 1

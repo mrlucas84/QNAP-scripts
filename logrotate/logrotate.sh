@@ -11,6 +11,7 @@ fi
 timestamp_log() { while IFS='' read -r line; do /bin/echo "[$(/bin/date '+%F %T.%3N')] $line" >> "$1"; done; };
 #exec 2>&1>>"$LOG"
 exec 2>&1> >(timestamp_log $LOG)
-/bin/echo "Starting logrotate.sh"
+/bin/echo "Starting logrotate.sh ****************"
+/bin/echo "PATH=$PATH"
 /opt/sbin/logrotate /share/CACHEDEV1_DATA/myprograms/logrotate/logrotate.conf
-/bin/echo "End of logrotate.sh"
+/bin/echo "End of logrotate.sh ****************"
