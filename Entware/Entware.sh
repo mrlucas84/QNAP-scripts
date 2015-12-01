@@ -24,11 +24,13 @@ case "$1" in
 	# sym-link $QPKG_DIR to /opt
 	/bin/rm -rf /opt
 	/bin/ln -sf $QPKG_DIR /opt
+
 	# adding opkg apps into system path ...
-
-
-	/bin/cat /root/.profile | /bin/grep "source" 1>>/dev/null 2>>/dev/null
-	[ $? -ne 0 ] && /bin/echo "source /opt/etc/profile" >> /root/.profile
+	#/bin/cat /root/.profile | /bin/grep "source" 1>>/dev/null 2>>/dev/null
+	#[ $? -ne 0 ] && /bin/echo "source /opt/etc/profile" >> /root/.profile
+	# Dani 01/12/2015: /root/.profile doesn't seem to be loaded so we add the line to .bash_profile instead
+	/bin/cat /root/.bash_profile | /bin/grep "source /opt/etc/profile" 1>>/dev/null 2>>/dev/null
+	[ $? -ne 0 ] && /bin/echo "[ -f /opt/etc/profile ] && source /opt/etc/profile" >> /root/.bash_profile
 	# startup Entware-ng services
 	/opt/etc/init.d/rc.unslung start
     ;;
