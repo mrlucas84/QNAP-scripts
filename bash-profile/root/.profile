@@ -5,5 +5,16 @@ echo -n " - " >> ~/profile.out
 shopt -q login_shell && echo 'Login shell' >> ~/profile.out || echo 'Not login shell' >> ~/profile.out
 echo "[$(/bin/date '+%F %T.%3N')] PATH=$PATH" >> ~/profile.out
 
-export PS1='[\w] # '
-reset
+if [ -f ~/.bashrc ]; then
+    echo "sourcing ~/.bashrc" >> ~/profile.out
+	echo "[$(/bin/date '+%F %T.%3N')] sourcing ~/.bashrc" >> ~/profile.out
+    source ~/.bashrc
+fi
+
+if [ -f /opt/etc/profile ]; then
+	echo "[$(/bin/date '+%F %T.%3N')] sourcing /opt/etc/profile" >> ~/profile.out
+    source /opt/etc/profile
+fi
+
+#export PS1='[\w] # '
+#reset

@@ -1,4 +1,9 @@
 # ~/.bashrc: executed by bash(1) for non-login interactive shells.
+echo "[$(/bin/date '+%F %T.%3N')] .bashrc invoked **************" >> ~/bashrc.out 
+echo -n "[$(/bin/date '+%F %T.%3N')] shell type: " >> ~/bashrc.out
+[[ $- == *i* ]] && echo -n 'Interactive' >> ~/bashrc.out || echo -n 'Not interactive' >> ~/bashrc.out
+echo -n " - " >> ~/bashrc.out
+shopt -q login_shell && echo 'Login shell' >> ~/bashrc.out || echo 'Not login shell' >> ~/bashrc.out
 
 export PATH=\
 /bin:\
@@ -8,8 +13,11 @@ export PATH=\
 /usr/bin/X11:\
 /usr/local/bin
 
+echo "[$(/bin/date '+%F %T.%3N')] export PATH=$PATH" >> ~/bashrc.out
+
 # If running interactively, then:
 if [ "$PS1" ]; then
+	echo "[$(/bin/date '+%F %T.%3N')] $PS1 : running interactively. Executing if block" >> ~/bashrc.out
 
     if [ "$BASH" ]; then
 	export PS1="[\u@\h \W]\\$ "
