@@ -1,20 +1,18 @@
-echo "[$(/bin/date '+%F %T.%3N')] .profile invoked **************" >> ~/profile.out 
-echo -n "[$(/bin/date '+%F %T.%3N')] shell type: " >> ~/profile.out
-[[ $- == *i* ]] && echo -n 'Interactive' >> ~/profile.out || echo -n 'Not interactive' >> ~/profile.out
-echo -n " - " >> ~/profile.out
-shopt -q login_shell && echo 'Login shell' >> ~/profile.out || echo 'Not login shell' >> ~/profile.out
-echo "[$(/bin/date '+%F %T.%3N')] PATH=$PATH" >> ~/profile.out
+# /root/.profile
+LOG=~/profile.out
+echo "[$(/bin/date '+%F %T.%3N')] .profile invoked **************" >> $LOG 
+echo -n "[$(/bin/date '+%F %T.%3N')] shell type: " >> $LOG
+[[ $- == *i* ]] && echo -n 'Interactive' >> $LOG || echo -n 'Not interactive' >> $LOG
+echo -n " - " >> $LOG
+shopt -q login_shell && echo 'Login shell' >> $LOG || echo 'Not login shell' >> $LOG
+echo "[$(/bin/date '+%F %T.%3N')] PATH=$PATH" >> $LOG
 
 if [ -f ~/.bashrc ]; then
-    echo "sourcing ~/.bashrc" >> ~/profile.out
-	echo "[$(/bin/date '+%F %T.%3N')] sourcing ~/.bashrc" >> ~/profile.out
+	echo "[$(/bin/date '+%F %T.%3N')] sourcing ~/.bashrc" >> $LOG
     source ~/.bashrc
 fi
 
 if [ -f /opt/etc/profile ]; then
-	echo "[$(/bin/date '+%F %T.%3N')] sourcing /opt/etc/profile" >> ~/profile.out
+	echo "[$(/bin/date '+%F %T.%3N')] sourcing /opt/etc/profile" >> $LOG
     source /opt/etc/profile
 fi
-
-#export PS1='[\w] # '
-#reset
