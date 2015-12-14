@@ -28,9 +28,23 @@ case "$1" in
 	# adding opkg apps into system path ...
 	#/bin/cat /root/.profile | /bin/grep "source" 1>>/dev/null 2>>/dev/null
 	#[ $? -ne 0 ] && /bin/echo "source /opt/etc/profile" >> /root/.profile
-	# Dani 01/12/2015: /root/.profile doesn't seem to be loaded so we add the line to .bash_profile instead
-	/bin/cat /root/.bash_profile | /bin/grep "source /opt/etc/profile" 1>>/dev/null 2>>/dev/null
-	[ $? -ne 0 ] && /bin/echo "[ -f /opt/etc/profile ] && source /opt/etc/profile" >> /root/.bash_profile
+	# Dani 14/12/2015: adding to both /root and /shares/homes/admin
+	ROOTSRCPROF=/share/CACHEDEV1_DATA/myprograms/bash-profile/root/.profile
+	if [ -f $ROOTSRCPROF ]; then
+		echo "[$(/bin/date '+%F %T.%3N')] copying $ROOTSRCPROF to /root" >> $LOG
+		/bin/cp -f $ROOTSRCPROF /root
+	fi
+	
+	HOMESRCPROF=/share/CACHEDEV1_DATA/myprograms/bash-profile/share/homes/admin/.bash_profile
+	/bin/cat /share/homes/admin/.bash_profile | /bin/grep "source /opt/etc/profile" | /bin/grep "source ~/.bashrc" 1>>/dev/null 2>>/dev/null
+	if [ $? -ne 0 ]; then
+		if [ -f $HOMESRCPROF ]; then
+			echo "[$(/bin/date '+%F %T.%3N')] copying $HOMESRCPROF to /share/homes/admin" >> $LOG
+			/bin/cp -f $HOMESRCPROF /share/homes/admin
+		fi
+	fi
+	
+	
 	# startup Entware-ng services
 	/opt/etc/init.d/rc.unslung start
     ;;
