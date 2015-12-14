@@ -29,9 +29,10 @@ case "$1" in
 	#/bin/cat /root/.profile | /bin/grep "source" 1>>/dev/null 2>>/dev/null
 	#[ $? -ne 0 ] && /bin/echo "source /opt/etc/profile" >> /root/.profile
 	# Dani 14/12/2015: adding to both /root and /shares/homes/admin
+	LOG=/share/CACHEDEV1_DATA/myprograms/bash-profile/entware-path.log
 	ROOTSRCPROF=/share/CACHEDEV1_DATA/myprograms/bash-profile/root/.profile
 	if [ -f $ROOTSRCPROF ]; then
-		echo "[$(/bin/date '+%F %T.%3N')] copying $ROOTSRCPROF to /root" >> $LOG
+		echo "[$(/bin/date '+%F %T.%3N')] copying $ROOTSRCPROF to /root" > $LOG
 		/bin/cp -f $ROOTSRCPROF /root
 	fi
 	
