@@ -1,29 +1,31 @@
 #!/opt/bin/bash
 # script called by cron
-mainlog=/share/CACHEDEV1_DATA/myprograms/backupjob/backupjob.log
-exec &> $mainlog
+log=/share/myprograms/exiftool/exiftool-job.log
+exec &> $log
 echo "[$(/bin/date '+%F %T.%3N')] exiftool-job.sh STARTED ***********************"
-timestamp_log() { 
+timestamp_log() {
 	while IFS='' read -r line
-		do /bin/echo "[$(/bin/date '+%F %T.%3N')] $line" >> "$1"
+		do echo "[$(/bin/date '+%F %T.%3N')] $line" >> "$1"
 	done
 }
 #redirect sterr to stdout and then stdout to function
-exec 2>&1> >(timestamp_log $mainlog)
-/bin/echo "PATH: $PATH"
-dirlist=( "/share/CACHEDEV1_DATA/Public/FOTOS/Subida autom·tica Dani"
-		  "/share/CACHEDEV1_DATA/Public/FOTOS/Subida autom·tica Sonia" )
-
-for item in "${dirlist[@]}" ; do
-	directory="$item/Camera/"
-	/bin/echo "Processing directory: $directory"
-	/bin/echo "***Executing command: exiftool -d %Y-%m/%Y.%m.%d-%H%M%S.[%f]%%-c.%%e" '"-testname<CreateDate"' "$directory"
-	exiftool -d %Y-%m/%Y.%m.%d-%H%M%S.[%f]%%-c.%%e "-testname<CreateDate" $directory
+exec 2>&1> >(timestamp_log $log)
+echo "PATH: $PATH"
+dirlist=( "/share/CACHEDEV1_DATA/Public/FOTOS/Subida autom√°tica Dani/Camera/" 
+	  "/share/CACHEDEV1_DATA/Public/FOTOS/Subida autom√°tica Sonia/100ANDRO/" )
+basecmd='exiftool -d %Y-%m/%Y.%m.%d-%H%M%S.[%f]%%-c.%%e "-testname<CreateDate"'
+for dir in "${dirlist[@]}" ; do
+	echo "Processing directory: $dir"
+#	cmd='$basecmd "$dir"'
+	echo "***Executing command:" $basecmd "'$dir'"
+	echo "-----------------------------------------------"
+	sleep 1
+	eval $basecmd "'$dir'"
 done
-
+echo "exiftool-job.sh FINISHED ***********************"
 #exiftool -d %Y%m%d_%H%M%%-c.%%e "-filename<CreateDate" DIR
 
 #Test rename but keep original filename:
 #exiftool -d %Y%m%d_%H%M%S[%f]%%-c.%%e "-testname<CreateDate" Camera/
 #exiftool -d %Y-%m/%Y%m%d_%H%M%S[%f]%%-c.%%e "-testname<CreateDate" Camera/
-exiftool -d %Y-%m/%Y.%m.%d-%H%M%S.[%f]%%-c.%%e "-testname<CreateDate" Camera/
+#exiftool -d %Y-%m/%Y.%m.%d-%H%M%S.[%f]%%-c.%%e "-testname<CreateDate" Camera/
